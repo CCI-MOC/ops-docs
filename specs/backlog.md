@@ -54,7 +54,7 @@ Github supports this model inherently in their [Kanban model](https://docs.githu
 
 This is part of a larger effort to make the work of managing the MOC, and by extension the [Open Infra Labs](https://openinfralabs.org) work open and more inviting for partners and the community to participate in.  This is not intended to capture all the work being done on the MOC, rather it is focused on the core dev and ops teams work.   If this changes over time we will revisit the policy and make adjustments. 
 
-## Alternatives &amp; History
+## Alternatives & History
 
 Other approaches:
 1. Use Github Kanban model and do not have separate Scrum Boards for each sprint.   <--- **Honestly given our size we should probably shelve sprints and do Kannan.  What does team need to see to decide?** --->
@@ -64,16 +64,17 @@ Other approaches:
 
 ### Author(s)
 
-<p>Primary author: Michael Daitzman<br/>
-  - <msd@bu.edu></p>
-<p>Other contributors:<br/> 
-  - team discussion</p>
+Primary author:
+  - Michael Daitzman <msd@bu.edu>
+
+Other contributors:
+  - team discussion
 
 ### Milestones
 
-<p>Policy will go into affect on Nov 16, 2020. </p>
+Policy will go into affect on Nov 16, 2020.
 
-<p>We should review the approach during each sprint and during retrospectives to evaluate changes which will increase the teams productivity.</p>
+We should review the approach during each sprint and during retrospectives to evaluate changes which will increase the teams productivity.
 
 ### Work Items
 
@@ -85,6 +86,6 @@ Not a definition of a Backlog, but a set of good practices:[Product BackLog Spri
 
 ## License
 
-<p>This work is licensed under a Creative Commons Attribution 3.0<br/>
-Unported License.<br/>
-<a href="http://creativecommons.org/licenses/by/3.0/legalcode">http://creativecommons.org/licenses/by/3.0/legalcode</a></p>
+This work is licensed under a Creative Commons Attribution 3.0
+Unported License.
+http://creativecommons.org/licenses/by/3.0/legalcode
