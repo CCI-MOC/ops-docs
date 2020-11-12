@@ -37,15 +37,16 @@ Github supports this model inherently in their [Kanban model](https://docs.githu
 
 1. Issues should be written associated with the repository closest to the section of relevant code.  For example a hil/bmi issues would be written in CCI-MOC/hil. If no repository is appropriate they may be added directly to the [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8).   
 2. If you add the issue to the repository,whenever possible add the repository to [Linked Repositories](https://github.com/orgs/CCI-MOC/projects/8/settings/linked_repositories) under the Menu.  This way it will be included in default searches.  
-3. To find and order all cards available across all cci-moc repositories execute this search in the ![add card](https://github.com/CCI-MOC/ops-docs/tree/master/specs/assets/githubaddcars.png)
+3. To find and order all cards available across all cci-moc repositories execute this search in the [add card](assets/githubaddcards.png) dialog:
  
     `org:CCI-MOC state:open is:issue is:open repo:*`
  
 ### Backlog Setup/Additions
-1.  Open [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8)
-2.  Click + Add cards on the right side of the project board
-3.  In the search field use this search: `org:CCI-MOC is:open is:issue repo:*`,  making sure "Only show results from linked repositories" is *not* checked.
-4. Drag the cards that show in the search results to the BackLog column add them <--- as a team figure out if we need two columns, one for order or "Ready to be worked" --->.  ![It should look something like this](https://github.com/CCI-MOC/ops-docs/tree/master/specs/assets/fillbacklog.png)when you do it. 
+1. Open [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8)
+2. Click + Add cards on the right side of the project board
+3. In the search field use this search: `org:CCI-MOC is:open is:issue repo:*`,  making sure "Only show results from linked repositories" is *not* checked.
+4. Drag the cards that show in the search results to the BackLog column add them <--- as a team figure out if we need two columns, one for order or "Ready to be worked" --->.
+   It should look something like [this](assets/fillbacklog.png) when you do it. 
     
 ### Scrum Setup
 1. Open [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8) 
