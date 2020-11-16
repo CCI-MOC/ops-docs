@@ -58,7 +58,7 @@ This is part of a larger effort to make the work of managing the MOC, and by ext
 ## Alternatives & History
 
 Other approaches:
-1. Use Github Kanban model and do not have separate Scrum Boards for each sprint.   <--- **Honestly given our size we should probably shelve sprints and do Kannan.  What does team need to see to decide?** --->
+1. Use Github Kanban model and do not have separate Scrum Boards for each sprint.   
 2. Automate the moving of the backlog between scrum boards every sprint. 
 
 ## Implementation
