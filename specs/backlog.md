@@ -31,7 +31,7 @@ The team has settled on GitHub Projects and Issues as the tool of choice. It mee
 
 The items in a backlog should be mutable both in their contents and their relative prioritization. Those changes should occur because of actions of the team, or team members, not due to side effects of the underlying tool.
 
-To ensure that level of order and flexibility issues should created in the repository closest to the relevant code and also tracked in the backlog for the development team.  
+To ensure that level of order and flexibility issues should be created in the repository closest to the relevant code and also tracked in the backlog for the development team.  
 
 Github supports this model inherently in their [Kanban model](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/about-project-boards) and, with a little bit of work can support it for scrum as well.  <--- we will need to validate by usage that the overhead is not onerous.  Also, a discussion of [Kanban or Scrum](https://www.mountaingoatsoftware.com/blog/when-kanban-is-the-better-choice) --->
 
