@@ -39,7 +39,7 @@ Github supports this model inherently in their [Kanban model](https://docs.githu
 2. If you add the issue to the repository,whenever possible add the repository to [Linked Repositories](https://github.com/orgs/CCI-MOC/projects/8/settings/linked_repositories) under the Menu.  This way it will be included in default searches.  
 3. To find and order all cards available across all cci-moc repositories execute this search in the [add card](assets/githubaddcards.png) dialog:
  
-    `org:CCI-MOC state:open is:issue is:open repo:*`
+    org:CCI-MOC state:open is:issue is:open repo:*
  
 ### Backlog Setup/Additions
 1. Open [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8)
