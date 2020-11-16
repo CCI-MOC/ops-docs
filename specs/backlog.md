@@ -1,6 +1,6 @@
 # Creation of Backlog as a Ranked List
 
-We want to ensure that decisions about what to work on incorporate prioritization's agreed by the the team, product owners, our partners and customers. Specifically, we want to reach the point that:
+We want to ensure that decisions about what to work on incorporate a priority agreed to by the team, product owners, partners and customers. Specifically, we want to reach the point that:
 
 - Prioritization is clear so that decisions and trade-offs may take an issues priority into account.
 	- this should be visible by a Rank Order List and, where appropriate, an explanation of the prioritization (example below).
