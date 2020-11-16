@@ -40,6 +40,8 @@ Github supports this model inherently in their [Kanban model](https://docs.githu
 3. To find and order all cards available across all cci-moc repositories execute this search in the [add card](assets/githubaddcards.png) dialog:
  
     org:CCI-MOC state:open is:issue is:open repo:*
+    
+This is part of a larger effort to make the work of managing the MOC, and by extension the [Open Infra Labs](https://openinfralabs.org) work open and more inviting for partners and the community to participate in.  This is not intended to capture all the work being done on the MOC, rather it is focused on the core dev and ops teams work.   If this changes over time we will revisit the policy and make adjustments.    
  
 ### Backlog Setup/Additions
 1. Open [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8)
@@ -51,9 +53,8 @@ Github supports this model inherently in their [Kanban model](https://docs.githu
 ### Scrum Setup
 1. Open [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8) 
 2. Create a new Scrum Project with the name based on starting and end dates - eg. Sprint week 46 and 47 based on number for weeks of year.  
-3. In Sprint Planning meeting move items from Backlog to Sprint Project. 
+3. In Sprint Planning Meeting items in [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8) are added to a sprint project board following [these instructions](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/adding-issues-and-pull-requests-to-a-project-board#adding-issues-and-pull-requests-to-a-project-board-from-the-sidebar).
 
-This is part of a larger effort to make the work of managing the MOC, and by extension the [Open Infra Labs](https://openinfralabs.org) work open and more inviting for partners and the community to participate in.  This is not intended to capture all the work being done on the MOC, rather it is focused on the core dev and ops teams work.   If this changes over time we will revisit the policy and make adjustments. 
 
 ## Alternatives & History
 
