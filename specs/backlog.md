@@ -6,7 +6,7 @@ We want to ensure that decisions about what to work on incorporate a priority ag
 	- this should be visible by a Rank Order List and, where appropriate, an explanation of the prioritization (example below).
 - The teams priorities are visible to interested parties. 
 - Items "ready to be worked on" state is easily identifiable.
-- The tool/process we use has a connection to GitHub.
+- The tool/process we use should react automatically to changes in Github issues and pull requests.
 - We have the flexibility to move items from a common backlog to sprints without reworking the item.
 - Movement of items through workflow (sprint or otherwise) is reflected in the backlog - eg. an item moved to a "done" state in a sprint should show as "done" in the backlog.
 
