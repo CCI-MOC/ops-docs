@@ -31,11 +31,11 @@ The team has settled on GitHub Projects and Issues as the tool of choice. It mee
 
 The items in a backlog should be mutable both in their contents and their relative prioritization. Those changes should occur because of actions of the team, or team members, not due to side effects of the underlying tool.
 
-To ensure that level of order and flexibility issues should be written as close to the code they relate to as possible and also tracked in the backlog for the development team.  
+To ensure that level of order and flexibility issues should created in the repository closest to the relevant code and also tracked in the backlog for the development team.  
 
 Github supports this model inherently in their [Kanban model](https://docs.github.com/en/free-pro-team@latest/github/managing-your-work-on-github/about-project-boards) and, with a little bit of work can support it for scrum as well.  <--- we will need to validate by usage that the overhead is not onerous.  Also, a discussion of [Kanban or Scrum](https://www.mountaingoatsoftware.com/blog/when-kanban-is-the-better-choice) --->
 
-1. Issues should be written associated with the repository closest to the section of relevant code.  For example a hil/bmi issues would be written in CCI-MOC/hil. If no repository is appropriate they may be added directly to the [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8).   
+1. Issues should be written associated with the repository closest to the section of relevant code.  For example a hil/bmi issue would be created in CCI-MOC/hil. If no repository is appropriate they may be added directly to the [mocbacklog](https://github.com/orgs/CCI-MOC/projects/8).   
 2. If you add the issue to the repository,whenever possible add the repository to [Linked Repositories](https://github.com/orgs/CCI-MOC/projects/8/settings/linked_repositories) under the Menu.  This way it will be included in default searches.  
 3. To find and order all cards available across all cci-moc repositories execute this search in the [add card](assets/githubaddcards.png) dialog:
  
