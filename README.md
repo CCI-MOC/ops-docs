@@ -16,7 +16,9 @@ This repository contains operational policy documentation for the
 1. Create a new branch for your spec.
 
 1. Create a new file in `specs/` by making a copy of
-   `specs/policy-template.md`.
+   `specs/policy-template.md`. Specs are numbered; your spec should
+   use the next available number, expressed as a four-digit,
+   zero-padded prefix (such as `0010-my-proposal.md`).
 
 1. Write a great policy document.
 
