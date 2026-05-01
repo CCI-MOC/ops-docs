@@ -8,7 +8,7 @@ Our system has maintenance and outages that need to be tracked.
 
 ## Policy
 
-Both Outages and Maintenance needs to be tracked.
+Both Outages and Maintenance need to be tracked.
 
 We will use [Outages.yaml](https://github.com/CCI-MOC/nerc-rates/blob/main/outages.yaml) to track both.
 
