@@ -4,7 +4,7 @@ We need to keep track of what outages are invoiced for.
 
 ## Problem Description
 
-Our system has maintenace and outages that need to be tracked.
+Our system has maintenance and outages that need to be tracked.
 
 ## Policy
 
