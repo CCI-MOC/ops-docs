@@ -37,7 +37,7 @@ This policy went into effect Oct 14, 2025.
 
 ### Work Items
 
-We will need to update this YAML every month before the end of the month.
+We will need to update `outages.yaml` in the `CCI-MOC/nerc-rates` repository (path: `outages.yaml`) every month before the end of the month.
 
 ## References
 
