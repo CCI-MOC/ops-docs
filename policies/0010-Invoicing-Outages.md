@@ -1,6 +1,8 @@
 # 0010 - Invoicing Outages
 
-We need to keep track of what outages are invoiced for.
+We need to keep track of outages and Maintenance time frames. 
+This will allow us to remove these times from invoicing to ensure 
+users are not billed for times when the system is not usable.
 
 ## Problem Description
 
