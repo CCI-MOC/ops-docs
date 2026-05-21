@@ -22,7 +22,7 @@ Primary author:
   - <joachimw@bu.edu>
 
 Other contributors:
-  - <None>
+  - None
 
 ### Milestones
 
