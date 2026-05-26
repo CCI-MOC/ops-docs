@@ -30,7 +30,7 @@ This policy went into effect Oct 14, 2025.
 
 ### Work Items
 
-To maintain accurate billing, the outages.yaml file in the CCI-MOC/nerc-rates repository must be updated monthly. This update must be completed and merged before the end of each month to ensure all downtime is captured prior to the generation of the upcoming invoices.
+To maintain accurate billing, the outages.yaml file in the CCI-MOC/nerc-rates repository must be updated immediately after the outage/maintenance. This update must be completed and merged before the end of each month to ensure all downtime is captured prior to the generation of the upcoming invoices.
 
 ## References
 
