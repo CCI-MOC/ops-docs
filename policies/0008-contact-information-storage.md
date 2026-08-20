@@ -17,10 +17,10 @@ using the templates below.
 
 To store Team Contact information please update the [Team Contact][4] file.
 
-[1]:https://github.com/CCI-MOC/ops-private/tree/main/contacts
-[2]:https://github.com/CCI-MOC/ops-private/tree/main/contacts/university_template.md
-[3]:https://github.com/CCI-MOC/ops-private/tree/main/contacts/partner_template.md
-[4]:https://github.com/CCI-MOC/ops-private/tree/main/contacts/teamcontact.md
+[1]:https://github.com/CCI-MOC/moc-private/tree/main/contacts
+[2]:https://github.com/CCI-MOC/moc-private/tree/main/contacts/university_template.md
+[3]:https://github.com/CCI-MOC/moc-private/tree/main/contacts/partner_template.md
+[4]:https://github.com/CCI-MOC/moc-private/tree/main/contacts/teamcontact.md
 
 ## Alternatives & History
 
