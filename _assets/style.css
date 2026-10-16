@@ -92,7 +92,8 @@ pre {
 }
 
 @media print {
-	nav {
+	nav,
+	.noprint {
 		display: none;
 	}
 

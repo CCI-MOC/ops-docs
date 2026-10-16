@@ -31,6 +31,9 @@
       Revision
       <a href="{{ repository.url }}/commit/{{ vc.revision }}">{{ vc.revision | truncate: 8, "" }}</a>
       @ {{ vc.date }}
+    <span class="noprint"> |
+    <a href="{{ repository.url }}/blob/{{ repository.ref }}/{{ page.inputPath }}?plain=1">View page source</a>
+    </span>
     </p>
   </footer>
 </body>
