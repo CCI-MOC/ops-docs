@@ -1,0 +1,21 @@
+---
+eleventyExcludeFromCollections: true
+title: Technical Documentation
+---
+
+<table>
+  <tr>
+    <th>ID</th><th>Title</th>
+  </tr>
+
+  {% for doc in collections.doc %}
+  <tr>
+    <td>
+      <a href="{{ doc.url }}">{{ doc.data.pageId }}</a>
+    </td>
+    <td>
+      {{ doc.data.title }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>

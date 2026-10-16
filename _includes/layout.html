@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }} - {% endif %}MOC Operations Documentation</title>
+  <link rel="stylesheet" href="/_assets/style.css">
+</head>
+<body>
+  <header>
+    <a href="/">
+      <img src="/_assets/moc-wordmark-small.png" alt="MOC Alliance">
+    </a>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/adrs/">ADRs</a></li>
+        <li><a href="/docs/">Technical Documentation</a></li>
+        <li><a href="/policies/">Policies</a></li>
+        <li><a href="/production-changes/">Production Changes</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    {% if title %}<h1>{{ title }}</h1>{% endif %}
+    {% if showPageId %}<p class="page-id">{{ pageId }}</p>{% endif %}
+    {{ content }}
+  </main>
+  <footer>
+    <p>
+      Revision
+      <a href="{{ repository.url }}/commit/{{ vc.revision }}">{{ vc.revision | truncate: 8, "" }}</a>
+      @ {{ vc.date }}
+    </p>
+  </footer>
+</body>
+</html>

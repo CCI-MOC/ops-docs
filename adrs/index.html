@@ -1,0 +1,21 @@
+---
+eleventyExcludeFromCollections: true
+title: Architectural Decision Records
+---
+
+<table>
+  <tr>
+    <th>ID</th><th>Title</th>
+  </tr>
+
+  {% for adr in collections.adr %}
+  <tr>
+    <td>
+      <a href="{{ adr.url }}">{{ adr.data.pageId }}</a>
+    </td>
+    <td>
+      {{ adr.data.title }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>

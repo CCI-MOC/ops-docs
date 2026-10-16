@@ -1,0 +1,21 @@
+---
+eleventyExcludeFromCollections: true
+title: Policies
+---
+
+<table>
+  <tr>
+    <th>ID</th><th>Title</th>
+  </tr>
+
+  {% for policy in collections.policy %}
+  <tr>
+    <td>
+      <a href="{{ policy.url }}">{{ policy.data.pageId }}</a>
+    </td>
+    <td>
+      {{ policy.data.title }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>

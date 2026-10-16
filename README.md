@@ -6,6 +6,10 @@ documentation, policies, and records of production changes in a single place,
 with each category managed through pull requests and reviewed according to its
 own approval requirements.
 
+The canonical URL for this repository is <https://github.com/cci-moc/ops-docs>.
+The documentation in this repository is published to
+<https://ops-docs.massopen.cloud>.
+
 ## Architectural Decision Records (ADRs)
 
 The [`adrs`](adrs) directory contains Architectural Decision Records. Quoting from <https://adr.github.io/>:
