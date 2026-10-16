@@ -1,9 +1,15 @@
 {
-  "type": "module",
-  "scripts": {
-    "build": "eleventy"
-  },
-  "dependencies": {
-    "@11ty/eleventy": "^3.1.7"
-  }
+	"type": "module",
+	"scripts": {
+		"build": "eleventy",
+		"validate-frontmatter": "node _scripts/validate-frontmatter.js"
+	},
+	"dependencies": {
+		"@11ty/eleventy": "^3.1.7"
+	},
+	"devDependencies": {
+		"ajv": "^8.20.0",
+		"ajv-formats": "^3.0.1",
+		"js-yaml": "^5.5.0"
+	}
 }

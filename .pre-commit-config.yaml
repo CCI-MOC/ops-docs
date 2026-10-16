@@ -18,3 +18,11 @@ repos:
         files: \.(yaml|yml)$
         types: [file, yaml]
         entry: yamllint --strict
+
+  - repo: local
+    hooks:
+      - id: validate-frontmatter
+        name: Validate document frontmatter
+        entry: node _scripts/validate-frontmatter.js
+        language: system
+        files: ^(adrs|docs|policies|production-changes)/.*\.md$

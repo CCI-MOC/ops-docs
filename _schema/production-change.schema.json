@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "production-change.schema.json",
+  "title": "Production change request frontmatter",
+  "allOf": [
+    { "$ref": "base.schema.json" }
+  ],
+  "type": "object",
+  "properties": {
+    "owner": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "when": {
+      "type": "string",
+      "anyOf": [{ "format": "date" }, { "format": "date-time" }]
+    }
+  },
+  "required": ["owner", "target", "when"]
+}
