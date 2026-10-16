@@ -1,0 +1,15 @@
+ops-adr:
+  - changed-files:
+      - any-glob-to-any-file: "adrs/*/README.md"
+
+ops-doc:
+  - changed-files:
+      - any-glob-to-any-file: "docs/*/README.md"
+
+ops-policy:
+  - changed-files:
+      - any-glob-to-any-file: "policies/*/README.md"
+
+ops-change:
+  - changed-files:
+      - any-glob-to-any-file: "production-changes/*/README.md"
