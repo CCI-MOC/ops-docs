@@ -24,6 +24,7 @@
   <main>
     {% if title %}<h1>{{ title }}</h1>{% endif %}
     {% if showPageId %}<p class="page-id">{{ pageId }}</p>{% endif %}
+    {% if toc %}{% toc content %}{% endif %}
     {{ content }}
   </main>
   <footer>

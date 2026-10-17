@@ -1,3 +1,4 @@
 {
-	"tags": ["adr"]
+	"tags": ["adr"],
+	"toc": true
 }
