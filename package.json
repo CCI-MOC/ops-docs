@@ -5,7 +5,9 @@
 		"validate-frontmatter": "node _scripts/validate-frontmatter.js"
 	},
 	"dependencies": {
-		"@11ty/eleventy": "^3.1.7"
+		"@11ty/eleventy": "^3.1.7",
+		"markdown-it": "^15.0.3",
+		"markdown-it-github-alerts": "^1.0.1"
 	},
 	"devDependencies": {
 		"ajv": "^8.20.0",
