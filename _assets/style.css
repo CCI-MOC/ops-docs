@@ -27,7 +27,7 @@ header img {
 	height: 40px;
 }
 
-nav ul {
+header nav ul {
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;
@@ -36,13 +36,13 @@ nav ul {
 	padding: 0;
 }
 
-nav a {
+header nav a {
 	text-decoration: none;
 	color: #222;
 	font-weight: 500;
 }
 
-nav a:hover {
+header nav a:hover {
 	text-decoration: underline;
 }
 
@@ -164,6 +164,21 @@ pre {
 
 .markdown-alert.markdown-alert-caution .markdown-alert-title {
 	color: var(--color-caution);
+}
+
+.toc {
+	margin-bottom: 1rem;
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--border-color);
+}
+
+.toc summary {
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.toc ul {
+	margin-bottom: 0;
 }
 
 @media print {
