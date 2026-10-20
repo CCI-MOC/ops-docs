@@ -121,11 +121,18 @@ The supporting choices, each of which could be made differently:
   We run it without a volume anyway, which means everything we need comes back declaratively from
   the CRs after a restart, and anything else is allowed to be lost. **That has a consequence for
   projects: a dashboard built in the UI does not survive.** Dashboards belong in git. If a project
-  needs to keep its own, this is the point to revisit.
+  needs to keep its own, this is the point to revisit. A project that needs Explore or wants to
+  keep its own dashboards sets `grafana.editable: true`. That switches the anonymous role to Editor
+  and adds a 512Mi volume, rollout `Recreate` because the volume is ReadWriteOnce. Editor and
+  volume come together on purpose: an Editor saving into `emptyDir` loses everything with the next
+  pod. Neither Viewer nor Editor may change datasources in Grafana OSS, that is org admin only, so
+  the tenancy is unaffected.
 - **No alerting in Grafana**, a separate decision from the volume. Alerting belongs to the
   platform: Prometheus evaluates `PrometheusRule`, Alertmanager routes what fires, both already
   running and both tenant-aware. Grafana alerting would be a second path next to the one OpenShift
-  ships.
+  ships. With `editable` it is switched off in the config as well
+  (`unified_alerting.enabled: "false"`), for a second reason: an Editor could add a webhook contact
+  point, and Grafana would send it from inside the cluster with open egress.
 - **A community operator, knowingly.** `grafana-operator` v5 only ships in `community-operators`,
   while every other operator here comes from `redhat-operators`. This is a deliberate exception. The
   fallback, if community support turns out to be unacceptable for something projects rely on, is a
@@ -225,6 +232,10 @@ view, Grafana per project on 9092. Intended, and still real operational work: tw
 two things to explane. One correction to how I put it earlier: 9091 on a workload cluster shows that
 cluster, not the fleet. The fleet view is the hub's.
 
+**With `editable`, everybody who passes the proxy is the same anonymous Editor.** That includes
+`open-accelerator-admins` through `cluster-reader`, and project members who only have view. Changes
+cannot be attributed to a person.
+
 **We depend on a community operator** for something projects use directly. Known, accepted, with a
 named fallback.
 
@@ -242,7 +253,10 @@ named fallback.
 5. **Whether AI Telemetry is supportable** was never actually asked, I am going on what I know. If
    somebody checks and it turns out there is a support path, the alternative above deserves a real
    comparison rather than the short treatment it gets here.
-6. **The negative access test is missing, and it is the one that matters.** Project A reads its own
+6. **SQLite on `pure-fb-nfsv4` is untested.** The volume uses the default storage class, and SQLite
+   is known to be fragile on NFS because of file locking. Try it on dev-workload0 before any
+   project gets `editable`.
+7. **The negative access test is missing, and it is the one that matters.** Project A reads its own
    data, project B reaches neither through a hand-made namespace query nor through 9091 with the
    project's service account. We could not run it: impersonating a service account is Forbidden for
    this account on the workload cluster. Somebody with those rights should, and the result belongs
