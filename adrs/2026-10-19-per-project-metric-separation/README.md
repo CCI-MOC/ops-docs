@@ -239,6 +239,16 @@ cannot be attributed to a person.
 **We depend on a community operator** for something projects use directly. Known, accepted, with a
 named fallback.
 
+**A project dashboard is only as good as the platform Prometheus under it**, and that is not part of
+this chart. `cadvisor` lives in the platform instance, not in user workload monitoring, so the
+container metrics the `project-overview` panels draw come from there. On a cluster where the platform
+Prometheus mounts `emptyDir`, a project gets a dashboard that works and shows the age of the pod.
+Nothing in Grafana reports this, and Argo is green either way.
+
+That is a per-cluster property, so it has to be checked per cluster rather than assumed from this
+decision. Today the three workload clusters hold 15 days on a 32Gi volume, which is what the numbers
+above rely on.
+
 ## Open points
 
 1. **Nothing is built for a tenancy demo yet.** Showing two projects that cannot see each other is
@@ -256,7 +266,10 @@ named fallback.
 6. **SQLite on `pure-fb-nfsv4` is untested.** The volume uses the default storage class, and SQLite
    is known to be fragile on NFS because of file locking. Try it on dev-workload0 before any
    project gets `editable`.
-7. **The negative access test is missing, and it is the one that matters.** Project A reads its own
+7. **Nothing warns when the platform Prometheus below a project has no volume.** The dashboard looks
+   healthy and the panels are simply short. A check on the cluster, or a panel that shows the oldest
+   sample it can see, would make it visible. Neither exists.
+8. **The negative access test is missing, and it is the one that matters.** Project A reads its own
    data, project B reaches neither through a hand-made namespace query nor through 9091 with the
    project's service account. We could not run it: impersonating a service account is Forbidden for
    this account on the workload cluster. Somebody with those rights should, and the result belongs
