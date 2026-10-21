@@ -263,9 +263,13 @@ above rely on.
 5. **Whether AI Telemetry is supportable** was never actually asked, I am going on what I know. If
    somebody checks and it turns out there is a support path, the alternative above deserves a real
    comparison rather than the short treatment it gets here.
-6. **SQLite on `pure-fb-nfsv4` is untested.** The volume uses the default storage class, and SQLite
-   is known to be fragile on NFS because of file locking. Try it on dev-workload0 before any
-   project gets `editable`.
+6. **SQLite on `pure-fb-nfsv4` works, but not under a real project yet.** The concern was file
+   locking, SQLite being known to be fragile on NFS. Tested on dev-workload0 on 2026-10-20 with
+   `grafana/grafana:11.3.0`: the export mounts `nfsvers=4.1` with no `nolock`, the pod reports
+   `local_lock=none`, the database was created and the migrations ran, and after deleting the pod the
+   new one reopened the same file and logged `migrations completed, performed=602, skipped=6`. No
+   stale lock. What is still untested is a real project with `editable: true` and somebody actually
+   saving dashboards, rather than one pod cycled by hand.
 7. **Nothing warns when the platform Prometheus below a project has no volume.** The dashboard looks
    healthy and the panels are simply short. A check on the cluster, or a panel that shows the oldest
    sample it can see, would make it visible. Neither exists.
@@ -281,6 +285,8 @@ above rely on.
 - The ADR on central metric collection, which covers the other half of "why can somebody not see
   this metric". That one is about what reaches the hub at all; this one is about who may read it.
   Both answers are needed to work out where to look when a metric is missing.
+- The ADR on running the Prometheus TSDB on FlashBlade NFS, for the volumes these dashboards read
+  through and why upstream does not stand behind that filesystem
 - `pkg/controllers/uiplugin/prometheus-global-datasource.go` in the Cluster Observability Operator,
   for the hardcoded Perses datasource port
 - The MOC 1.0 metering and billing design, section "How AI Telemetry multi-tenancy and
