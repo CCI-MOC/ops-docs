@@ -1,5 +1,6 @@
 ---
 title: A friendly title for your ADR
+# standards: [nist-ia, nist-au, ...]
 ---
 
 ## Context
