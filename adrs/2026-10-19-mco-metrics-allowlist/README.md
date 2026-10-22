@@ -20,10 +20,8 @@ Every argument pins `__name__` to one exact value:
 A metric that is not named does not get filtered out. It is never asked for. The collector has no
 `--drop`, no `--exclude` and no `--relabel`, so this list is the whole mechanism.
 
-One correction to how we first described this: the allowlist is not purely additive. ACM documents
-[removing a default metric][rm] by putting its name into `metrics_list.yaml` with a hyphen in
-front, `-cluster_infrastructure_provider`. So excluding single metrics is supported, by name. What
-has no documented form is excluding by pattern, which is the thing this ADR is about.
+Despite it's name, the allowlist is not purely additive. ACM documents
+[how to remove a metric][rm] by prefixing its name with a hyphen in `metrics_list.yaml`, for example `-cluster_infrastructure_provider`. This permits excluding specific metrics by name, but does not permit excluding metrics with a pattern, which is the thing this ADR is about.
 
 We run it this way becuase the goal was to stay **as close to MOC 1.0 as possible**, and MOC 1.0 runs
 the allowlist that ACM ships. Worth writing down that this was the reason, and not a comparison with
