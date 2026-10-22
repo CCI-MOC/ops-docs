@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -euo pipefail
+
+RACADM=${RACADM:-racadm}
+
+[ $# -ge 1 ] || {
+  echo "ERROR: missing address" >&2
+  exit 1
+}
+IP="$1"
+CN="${2:-$IP}"
+
+USER="${IDRAC_USER:-root}"
+PASS="${IDRAC_PASSWORD:?Set IDRAC_PASSWORD environment variable}"
+
+STEP_CA_URL="${STEP_CA_URL:?Set STEP_CA_URL environment variable}"
+STEP_CA_FINGERPRINT="${STEP_CA_FINGERPRINT:?Set STEP_CA_FINGERPRINT environment variable}"
+STEP_PROVISIONER="${STEP_PROVISIONER:?Set STEP_PROVISIONER environment variable}"
+STEP_PROVISIONER_PASSWORD_FILE="${STEP_PROVISIONER_PASSWORD_FILE:?Set STEP_PROVISIONER_PASSWORD_FILE environment variable}"
+
+echo "[*] Bootstrapping trust with step-ca at ${STEP_CA_URL}..."
+step ca bootstrap -f \
+  --ca-url "$STEP_CA_URL" \
+  --fingerprint "$STEP_CA_FINGERPRINT"
+
+$RACADM -r "$IP" -u "$USER" -p "$PASS" set iDRAC.Security.CsrCommonName "$CN"
+$RACADM -r "$IP" -u "$USER" -p "$PASS" set iDRAC.Security.CsrSubjectAltName "$IP"
+$RACADM -r "$IP" -u "$USER" -p "$PASS" set iDRAC.Security.CsrEmailAddr contact@massopen.cloud
+$RACADM -r "$IP" -u "$USER" -p "$PASS" set iDRAC.Security.CsrOrganizationName "Mass Open Cloud"
+$RACADM -r "$IP" -u "$USER" -p "$PASS" set iDRAC.Security.CsrOrganizationUnit "IT"
+$RACADM -r "$IP" -u "$USER" -p "$PASS" set iDRAC.Security.CsrLocalityName Boston
+$RACADM -r "$IP" -u "$USER" -p "$PASS" set iDRAC.Security.CsrStateName "MA"
+$RACADM -r "$IP" -u "$USER" -p "$PASS" get iDRAC.Security
+$RACADM -r "$IP" -u "$USER" -p "$PASS" sslcsrgen -g -f "$IP.csr"
+
+echo "[*] Requesting signing token from step-ca (provisioner=${STEP_PROVISIONER})..."
+token=$(step ca token "$CN" \
+  --san "$IP" \
+  --provisioner "$STEP_PROVISIONER" \
+  --provisioner-password-file "$STEP_PROVISIONER_PASSWORD_FILE")
+
+echo "[*] Signing CSR with step-ca..."
+# --force must come after the positional args: this step CLI build
+# mis-parses "step ca sign -f csr-file crt-file" as too many positional
+# arguments. Without it, signing fails non-interactively (no tty to
+# prompt on) if $IP.crt already exists from a prior run.
+step ca sign "$IP.csr" "$IP.crt" --force --token "$token"
+echo "[*] Signed certificate chain saved to $IP.crt"
+
+$RACADM -r "$IP" -u "$USER" -p "$PASS" sslcertupload -t 1 -f "$IP.crt"
+$RACADM -r "$IP" -u "$USER" -p "$PASS" racreset
