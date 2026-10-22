@@ -1,12 +1,35 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "base.schema.json",
-  "title": "Base document frontmatter",
-  "type": "object",
-  "properties": {
-    "title": {
-      "type": "string"
-    }
-  },
-  "required": ["title"]
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "base.schema.json",
+	"title": "Base document frontmatter",
+	"type": "object",
+	"properties": {
+		"title": {
+			"type": "string"
+		},
+		"standards": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"enum": [
+					"nist-ac",
+					"nist-at",
+					"nist-au",
+					"nist-ca",
+					"nist-cm",
+					"nist-ia",
+					"nist-ir",
+					"nist-ma",
+					"nist-mp",
+					"nist-pe",
+					"nist-ps",
+					"nist-ra",
+					"nist-sc",
+					"nist-si",
+					"hippa"
+				]
+			}
+		}
+	},
+	"required": ["title"]
 }

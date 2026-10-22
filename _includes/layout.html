@@ -24,6 +24,20 @@
   <main>
     {% if title %}<h1>{{ title }}</h1>{% endif %}
     {% if showPageId %}<p class="page-id">{{ pageId }}</p>{% endif %}
+    {% if standards %}
+    <ul class="standards">
+      {% for standard in standards %}
+      {% assign info = standardsInfo[standard] %}
+      <li class="standard">
+        {% if info.url %}
+        <a href="{{ info.url }}" title="{{ info.description }}">{{ info.label | default: standard }}</a>
+        {% else %}
+        <span title="{{ info.description }}">{{ info.label | default: standard }}</span>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
     {% if toc %}{% toc content %}{% endif %}
     {{ content }}
   </main>

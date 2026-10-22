@@ -5,6 +5,7 @@
 	--color-warning: #9a6700;
 	--color-caution: #d1242f;
 	--color-important: #8250df;
+	--color-standard: #57606a;
 }
 
 body {
@@ -166,6 +167,33 @@ pre {
 	color: var(--color-caution);
 }
 
+.standards {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	list-style: none;
+	margin: 0 0 1rem;
+	padding: 0;
+}
+
+.standard {
+	border-radius: 0.25rem;
+	background-color: var(--color-standard);
+	font-size: 0.875rem;
+}
+
+.standard a,
+.standard span {
+	display: block;
+	padding: 0.125rem 0.5rem;
+	color: #fff;
+	text-decoration: none;
+}
+
+.standard a:hover {
+	text-decoration: underline;
+}
+
 .toc {
 	margin-bottom: 1rem;
 	padding: 0.5rem 1rem;
@@ -190,5 +218,15 @@ pre {
 	a {
 		color: inherit;
 		text-decoration: none;
+	}
+
+	.standard {
+		background-color: transparent;
+		border: 1px solid #000;
+	}
+
+	.standard a,
+	.standard span {
+		color: inherit;
 	}
 }
