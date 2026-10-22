@@ -1,5 +1,5 @@
 ---
-title: Separate project metrics with one Grafana per project on the tenancy port
+title: Separate project metrics with one Grafana per project
 ---
 
 ## Context
