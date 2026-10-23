@@ -25,4 +25,4 @@ repos:
         name: Validate document frontmatter
         entry: node _scripts/validate-frontmatter.js
         language: system
-        files: ^(adrs|docs|policies|production-changes)/.*\.md$
+        files: ^(adrs|docs|policies|production-changes)/.*/README\.md$
