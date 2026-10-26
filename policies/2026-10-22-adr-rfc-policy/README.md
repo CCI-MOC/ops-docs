@@ -1,5 +1,6 @@
 ---
 title: ADR and RFC policy
+standards: [nist-cm]
 ---
 
 ## Context
