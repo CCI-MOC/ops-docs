@@ -18,6 +18,6 @@ For ADRs, a representative from each of Mass Open Cloud (MOC), Boston University
 
 If any representative disagrees with the content or process of the ADR, they must express that disagreement in the pull request conversation and withold approval of the pull request.
 
-Should disagreement persist, any approver may propose a simple majority vote to progress the ADR to a Discovered RFC. If the vote succeeds, the PR closes, and the proposer drafts the Discovered RFC. If the vote fails, a 3 business day countdown begins. Discussion continues, and approvers may continue to propose a Discovered RFC or to seek approval of an adjusted ADR. At the end of the countdown, the PR closes without a Discovered RFC, and the ADR is not adopted.
+Should disagreement persist, any approver may ask to progress the ADR to an RFC. If such a request is made, the PR closes, and the proposer drafts the RFC. From this point forward, discussion and approval follow the RFC process.
 
 Discovered RFCs have equal authority as existing Direct RFCs that came without an associated ADR. Where Discovered RFCs and Direct RFCs conflict, the most recent of the Discovered and Direct RFCs must include in its Decision section a determination on where the most recent RFC does and does not supersede past RFCs.
