@@ -1,22 +1,18 @@
 ---
-title: ADR
+title: ADR PRs
 standards: [nist-cm]
 ---
 
 ## Context
 
-The [operations documentation repository ADR](../../adrs/2026-10-15-ops-docs-repository/README.md) defines the "what" for ADRs. This policy defines the "how" for ADRs.
+We want the option to document decisions in a faster, simpler way than RFCs.
 
-In the past, RFCs combined several functions--specification, requirements, onboarding, memorialization, and consensus-seeking. Coupling these functions meant that consensus-seeking blocked the other four functions, causing implementation delays.
+Architectural Design Records (ADRs) are this option.
 
-ADRs decouple memorialization, specification, and requirements from onboarding via [`docs`](../../docs/) and from consensus-seeking, which continues on in RFCs.
-
-However, there is the risk that ADRs will conflict with RFCs, whether those RFCs are already present or would be needed.
+ADRs become active once they arrive in the `main` branch of this repository. To reach `main`, ADRs must go through a pull request (PR), and this policy defines the specifics of these PRs.
 
 ## Policy
 
-For ADRs, a representative from each of Mass Open Cloud (MOC), Boston University (BU), and Red Hat (RH) must approve any pull request to this repository that includes any changes to an ADR in the `adrs/` folder.
+Mass Open Cloud (MOC), Boston University (BU), and Red Hat (RH) each must approve the PR through a representative from each institution. The representative approving the PR is a separate person from the author of the PR.
 
-If any representative disagrees with the content or process of the ADR, they must express that disagreement in the pull request conversation and withold approval of the pull request.
-
-Should disagreement persist, any approver may ask to progress the ADR to an RFC. If such a request is made, the PR closes, and the proposer drafts the RFC. From this point forward, discussion and approval follow the RFC process.
+At any point before the PR merges, any approver may propose to progress the ADR to an RFC by commenting in the PR. The PR closes once this request happens, and the proposer drafts the RFC. Once the RFC is approved, the proposer creates an ADR PR for to reflect the consensus reached in the RFC.
