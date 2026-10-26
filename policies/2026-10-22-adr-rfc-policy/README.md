@@ -1,5 +1,5 @@
 ---
-title: ADR and RFC policy
+title: ADR
 standards: [nist-cm]
 ---
 
