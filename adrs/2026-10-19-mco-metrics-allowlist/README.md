@@ -149,19 +149,6 @@ form for is a **global drop rule that overrides the existing selectors**: an add
 is OR-ed with the 230 already there, so as an additional selector it can only widen. Reproducing
 exclusion would mean replacing those selectors, which is a different change from editing a list.
 
-### Why the gap is maintenance, not technology
-
-Editing the selection is routine work and does not reopen this decision. CCI-MOC/oac-apps#140 is
-exactly that: three names added, documented mechanism, no change of model. That holds with `names:`
-alone, which is what the argument rests on.
-
-A pattern makes a bulk addition more convenient — `matches: [__name__=~"ovs_.*"]` took `ovs_*` from 0
-to 86 names across all three clusters, see [measurements.md](measurements.md) — but it is a
-convenience on top, not the reason the model is affordable.
-
-What stays true is that a metric **no existing selector matches** does not reach the hub, and
-nothing reports that it is missing. A pattern shifts where that line sits, it does not remove it.
-
 ### Why local collection stays broader
 
 Aligning the two would mean governing local collection by an allowlist as well, one model and one
