@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
-import { load as parseYaml } from "js-yaml";
+import { extractFrontmatter } from "./frontmatter.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const schemaDir = path.join(__dirname, "..", "_schema");
@@ -26,14 +26,6 @@ const ajv = new Ajv2020({ allErrors: true });
 addFormats(ajv);
 ajv.addSchema(baseSchema);
 ajv.addSchema(productionChangeSchema);
-
-function extractFrontmatter(source) {
-	const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(source);
-	if (!match) {
-		return {};
-	}
-	return parseYaml(match[1]) ?? {};
-}
 
 function categoryFor(file) {
 	return file.split(path.sep)[0];

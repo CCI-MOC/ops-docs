@@ -2,7 +2,9 @@
 	"type": "module",
 	"scripts": {
 		"build": "eleventy",
-		"validate-frontmatter": "node _scripts/validate-frontmatter.js"
+		"test": "node --test _scripts/*.test.js",
+		"validate-frontmatter": "node _scripts/validate-frontmatter.js",
+		"label-by-standards": "node _scripts/label-by-standards.js"
 	},
 	"dependencies": {
 		"@11ty/eleventy": "^3.1.7",
