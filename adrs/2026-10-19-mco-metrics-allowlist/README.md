@@ -107,9 +107,10 @@ checking whether explicit selection is still the right model, which is what this
 - **An added pattern cannot narrow.** Prometheus joins `match[]` selectors with OR, so a selector
   added next to the 230 can only union with them. That is an argument about adding, not proof that a
   replaced selector could never restrict its own selection.
-- **Our use of it is not documented.** A general name pattern in the custom allowlist works on ACM
-  2.17.3, and the hub's own default list
-  uses it, but the guide documents only `names` and `recording_rules`.
+- **Using `matches:` as a general name pattern is not documented.** The key itself is, and the hub's
+  own default list carries 13 such entries, but the guide shows `matches` only inside `collect_rules`
+  with `__name__` pinned to one value. For the custom allowlist it documents `names` and
+  `recording_rules`. Measured on ACM 2.17.3, see [measurements.md](measurements.md).
 - **Metrics can arrive more than once per cluster**, by up to three transport paths and, inside one
   of them, from two ServiceMonitors scraping the same pods. A naive `count by (cluster)` counts those
   series, not distinct subjects, and so overcounts when read as a count of them. Query patterns in
