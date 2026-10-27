@@ -45,7 +45,7 @@ The guarantee rests on all five, not on the port alone.
 
 ### Why not Perses
 
-COO's UI plugin gives the console a dashboard page built on Perses, and that was the first plan.
+The Cluster Observability Operator (COO)'s UI plugin gives the console a dashboard page built on Perses, and that was the first plan.
 It cannot separate projects, and not as a configuration gap we could close.
 
 In COO 1.5.3, the version installed here, the Perses datasource is created pointing at port
