@@ -1,16 +1,15 @@
 ---
-title: Keep the MCO allowlist for now, keep exclusion open as an option
+title: Collect central metrics using MultiClusterObservability allowlist keeping exclusion lists as a future change
 ---
 
 ## Context
 
-ACM MultiClusterObservability collects by allowlist. The hub's
+ACM MultiClusterObservability (MCO) collects metrics with an allowlist. The hub's
 `observability-metrics-allowlist` names 214 metrics plus 13 label matchers, and the
 `metrics-collector` turns that into **227 `--match` arguments** against the local Prometheus
-`/federate` endpoint. A second collector does the same for user workload metrics with 35 matchers.
-
-Counted on 2026-10-19. It is 230 since CCI-MOC/oac-apps#140 merged on 2026-10-20 and added three DCGM
-names through the custom allowlist, which is what a routine addition looks like.
+`/federate` endpoint. A second collector does the same for user workload metrics with 35 matchers
+(counted on 2026-10-19. It is 230 since CCI-MOC/oac-apps#140 merged on 2026-10-20 and added three
+DCGM names through the custom allowlist, which is what a routine addition looks like).
 
 Nearly every argument pins `__name__` to one exact value:
 
@@ -49,10 +48,12 @@ documented, and a pattern adds all metrics matching a prefix in one line. Any se
 could collect is reachable by editing the list, so "we collect too few" is not a decision, it is a
 pull request. What cannot be edited is the shape:
 
-| | MCO | COO |
-|---|---|---|
-| allowlist | yes | yes |
+|           | MCO    | COO |
+|-----------|--------|-----|
+| allowlist | yes    | yes |
 | drop list | **no** | yes |
+- MCO: Multi Cluster Observability
+- COO: Cluster Observability Operator
 
 That is upstream behaviour, not configuration, and it is the one constraint this ADR works around.
 
@@ -120,7 +121,7 @@ checking whether explicit selection is still the right model, which is what this
 **Keep the MCO allowlist as the model for central collection, and do not narrow local collection to
 match it.**
 
-The allowlist stays for the reason it was picked: it is the collection model MOC 1.0 runs, in
+The allowlist stays for the reason it was picked: it was the collection model used in MOC 1.0, in
 production. We have since added to its contents, so this is the same model rather than the same
 configuration. What this ADR adds is that keeping it costs less than assumed, and that central and
 local selection are deliberately different.
