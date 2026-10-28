@@ -193,11 +193,11 @@ cluster. So this is a well-founded expectation, not a proven one.
 **The cost is one Grafana pod plus one `oauth-proxy` sidecar per participating project**, against
 that project's own quota. In numbers, from the chart:
 
-| | requests | limits |
-|---|---|---|
-| Grafana | 100m CPU, 256Mi | 500m CPU, 512Mi |
-| `oauth-proxy` sidecar | 50m CPU, 64Mi | 200m CPU, 256Mi |
-| **per project** | **150m CPU, 320Mi** | **700m CPU, 768Mi** |
+|                       | requests            | limits              |
+| --------------------- | ------------------- | ------------------- |
+| Grafana               | 100m CPU, 256Mi     | 500m CPU, 512Mi     |
+| `oauth-proxy` sidecar | 50m CPU, 64Mi       | 200m CPU, 256Mi     |
+| **per project**       | **150m CPU, 320Mi** | **700m CPU, 768Mi** |
 
 Deliberately small, and the sidecar needs its own entry because a container without resources picks
 up the project `LimitRange` default of 1 CPU and 2Gi. No storage, see above.
