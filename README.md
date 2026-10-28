@@ -62,7 +62,7 @@ The [`policies`](policies) directory contains documentation on policies that we 
 
 ### Creating a new policy
 
-1. Copy the policy template to a new subdirectory of [`policy`](policy). The new directory name should have the format `YYYY-mm-dd-title`, so for example:
+1. Copy the policy template to a new subdirectory of [`policies`](policies). The new directory name should have the format `YYYY-mm-dd-title`, so for example:
 
     ```
     cp -a templates/policy policy/2026-10-15-adr-approval-process
@@ -82,7 +82,7 @@ The [`production-changes`](production-changes) directory contains a log of chang
 
 ### Creating a new production change request
 
-1. Copy the policy template to a new subdirectory of [`policy`](policy). The new directory name should have the format `YYYY-mm-dd-title`, so for example:
+1. Copy the production change template to a new subdirectory of [`production-changes`](production-changes). The new directory name should have the format `YYYY-mm-dd-title`, so for example:
 
     ```
     cp -a templates/production-change production-changes/2026-10-15-delete-observability-pvc
