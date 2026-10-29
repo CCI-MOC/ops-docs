@@ -19,6 +19,12 @@ repos:
         types: [file, yaml]
         entry: yamllint --strict
 
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.24.0
+    hooks:
+      - id: markdownlint-cli2
+        files: \.md
+
   - repo: local
     hooks:
       - id: validate-frontmatter

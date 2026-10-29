@@ -24,7 +24,7 @@ The [`adrs`](adrs) directory contains Architectural Decision Records. Quoting fr
 
 1. Copy the ADR template to a new subdirectory of [`adrs`](adrs). The new directory name should have the format `YYYY-mm-dd-title`, so for example:
 
-    ```
+    ```sh
     cp -a templates/adr adrs/2026-10-15-ops-docs-repository
     ```
 
@@ -44,7 +44,7 @@ The [`docs`](docs) directory contains technical documentation. Unlike an ADR, wh
 
 1. Copy the docs template to a new subdirectory of [`docs`](docs). The new directory name should have the format `YYYY-mm-dd-title`, so for example:
 
-    ```
+    ```sh
     cp -a templates/doc docs/2026-10-15-oac-prod-networking.md
     ```
 
@@ -64,7 +64,7 @@ The [`policies`](policies) directory contains documentation on policies that we 
 
 1. Copy the policy template to a new subdirectory of [`policies`](policies). The new directory name should have the format `YYYY-mm-dd-title`, so for example:
 
-    ```
+    ```sh
     cp -a templates/policy policy/2026-10-15-adr-approval-process
     ```
 
@@ -84,7 +84,7 @@ The [`production-changes`](production-changes) directory contains a log of chang
 
 1. Copy the production change template to a new subdirectory of [`production-changes`](production-changes). The new directory name should have the format `YYYY-mm-dd-title`, so for example:
 
-    ```
+    ```sh
     cp -a templates/production-change production-changes/2026-10-15-delete-observability-pvc
     ```
 
