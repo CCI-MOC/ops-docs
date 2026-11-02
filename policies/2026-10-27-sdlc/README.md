@@ -98,6 +98,7 @@ Does this change affect any of the following? (Yes / No, with a note for each Ye
 - [ ] Privileged functions or privileged accounts
 - [ ] New or updated dependencies, base images, operators, or external services
 - [ ] Security configuration settings or hardening baselines
+- [ ] None of the above
 
 **Overall security impact:** None / Low / Moderate / High
 **Risks and mitigations:**
@@ -124,7 +125,6 @@ Does this change affect any of the following? (Yes / No, with a note for each Ye
 * **Terraform/OpenTofu:** Provider and module versions are pinned, and dependency lock files (`.terraform.lock.hcl`) are committed.
 * **Containers and operators:** Base images are referenced by digest. Operators and Helm charts are pinned to specific versions.
 * **GitHub Actions:** Pinned by commit SHA (Section 3.6).
-* [TBD: dependency control for Keycloak and LDAP configuration, themes, and extensions.]
 * **Software Bill of Materials (SBOM):** SBOMs are automatically generated for software releases following the **SPDX** standard format to track open-source dependencies and third-party components.
 
 ## 4\. Secure Coding & Flaw Remediation
@@ -175,7 +175,7 @@ Vulnerability (CVE) management is governed by the [BU Vulnerability Management S
 
 * **Key rotation:** Customer-managed cryptographic keys (AWS KMS) are rotated automatically at least every **90 days**.
 * **Separation of duties:** Individuals who administer keys (create, change policy, schedule deletion) are not the same individuals who use keys to encrypt or decrypt data, and no single individual can both change a key policy and use the key. Key policies are managed in code and changed only through the process in Section 3.3.
-* **Certificates:** TLS/SSL certificates are provisioned and managed via **AWS Certificate Manager (ACM)** or automated via **Let's Encrypt**, with automated renewal.
+* **Certificates:** TLS/SSL certificates are provisioned and managed via **AWS Certificate Manager (ACM)** or automated via **Let's Encrypt**, with automated renewal. For systems for which we cannot get public certificates we deploy and manage self-signed certificates. [TBD: link to ADR for self-signed certificates once it merges]
 * Key compromise, revocation, and deletion procedures are documented in the SSP.
 
 ### 5.3 Cryptographic Protection (NIST SP 800-171 Rev 2: 3.13.8, 3.13.11, 3.13.16)
