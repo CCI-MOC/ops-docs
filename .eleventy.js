@@ -5,7 +5,7 @@ import markdownItGithubAlerts from "markdown-it-github-alerts";
 export default function (eleventyConfig) {
 	eleventyConfig.addPassthroughCopy("_assets");
 
-	const markdownLibrary = markdownIt({ html: true })
+	const markdownLibrary = markdownIt({ html: true, typographer: true })
 		.use(markdownItGithubAlerts)
 		.use(markdownItAnchor, { level: [2, 3, 4] });
 	eleventyConfig.setLibrary("md", markdownLibrary);
