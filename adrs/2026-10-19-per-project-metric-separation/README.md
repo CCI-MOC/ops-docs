@@ -140,43 +140,55 @@ The supporting choices, each of which could be made differently:
 
 ### What we did not pick
 
-**One shared Grafana with Grafana organisations.** Cheaper, one pod and one URL for everybody.
-Organisations are core Grafana and work in the community edition, no Enterprise licence needed:
-dashboards, folders, datasources, alerts and service accounts separate per organisation, and
-`org_mapping` in Generic OAuth puts a Keycloak group into the right one. Team Sync and
-per-datasource permissions are Enterprise, neither is needed here.
+#### One shared Grafana with Grafana organisations
 
-Two reasons against. First, Grafana would hold the credentials of several projects at once, so
-their correct assignment inside Grafana becomes security relevant. A misconfigured organisation or
-a shared datasource lets one project see another.
+Cheaper, one pod and one URL for everybody. Organisations are core Grafana and
+work in the community edition, no Enterprise licence needed: dashboards,
+folders, datasources, alerts and service accounts separate per organisation,
+and `org_mapping` in Generic OAuth puts a Keycloak group into the right one.
+Team Sync and per-datasource permissions are Enterprise, neither is needed
+here.
 
-Second, our tooling cannot do it. The `grafana-operator` has no CRD for organisations, and
-`GrafanaDatasource.spec.datasource.orgId` carries "Deprecated field, it has no effect". Dashboards
-and folders have no org field at all, so everything lands in the default organisation.
-Organisations per project, each with its own datasource and token, would have to be created past
-GitOps through the Grafana API or a job of our own. That is a step backwards from today, where
-every object is an operator CR.
+Two reasons against:
 
-If project count makes the per-project cost hurt, this is still the option to come back to, with
-the operator gap as part of the price.
+1. Grafana would hold the credentials of several projects at once, so their
+   correct assignment inside Grafana becomes security relevant. A misconfigured
+   organisation or a shared datasource lets one project see another.
 
-**Per-cluster separation instead of per-namespace.** Simpler, but it does not match OAC/MOC 2.0: the
-projects share `oac-prod-workload0`, so the dividing line is the namespace. Not really a choice, it
-is what the environment is.
+2. Our tooling cannot do it. The `grafana-operator` has no CRD for
+   organisations, and `GrafanaDatasource.spec.datasource.orgId` carries
+   "Deprecated field, it has no effect". Dashboards and folders have no org
+   field at all, so everything lands in the default organisation. Organisations
+   per project, each with its own datasource and token, would have to be
+   created past GitOps through the Grafana API or a job of our own. That is a
+   step backwards from today, where every object is an operator CR.
 
-**AI Telemetry with the Prometheus Keycloak Proxy**, how MOC 1.0 solved this with Chris Tate. It
-separates more than we do and one level higher: hubs, tenants, clusters and projects, Keycloak
-groups created per hub and per tenant, one proxy per hub sharing a realm with the application. For
-a provider with several hubs and real tenants that is the stronger model, and it ran in production.
+If project count makes the per-project cost hurt, this is still the option to
+come back to, with the operator gap as part of the price.
 
-The reason against is ownership, not technique. As far as I know it is no official Red Hat feature
-or product, so support and maintenance would sit with our team. For a component between projects
-and their data, carrying an authorisation decision, that is a commitment to make deliberately. The
-per-project Grafana leans on supported pieces instead: the OpenShift proxy chain, the oauth-proxy
-sidecar, the cluster's RBAC.
+#### Per-cluster separation instead of per-namespace
 
-If OAC/MOC 2.0 grows several hubs or needs tenants above the project level, this is the design to look at
-again, with the support question answered first.
+Simpler, but it does not match OAC/MOC 2.0: the projects share
+`oac-prod-workload0`, so the dividing line is the namespace. Not really a
+choice, it is what the environment is.
+
+#### AI Telemetry with the Prometheus Keycloak Proxy
+
+This is how MOC 1.0 solved this using solutions developed by Chris Tate. It
+separates more than we do and one level higher: hubs, tenants, clusters and
+projects, Keycloak groups created per hub and per tenant, one proxy per hub
+sharing a realm with the application. For a provider with several hubs and real
+tenants that is the stronger model, and it ran in production.
+
+The reason against is ownership, not technique. As far as I know it is no
+official Red Hat feature or product, so support and maintenance would sit with
+our team. For a component between projects and their data, carrying an
+authorisation decision, that is a commitment to make deliberately. The
+per-project Grafana leans on supported pieces instead: the OpenShift proxy
+chain, the oauth-proxy sidecar, the cluster's RBAC.
+
+If OAC/MOC 2.0 grows several hubs or needs tenants above the project level,
+this is the design to look at again, with the support question answered first.
 
 ## Consequences
 
