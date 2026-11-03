@@ -1,7 +1,8 @@
 {
 	"type": "module",
 	"scripts": {
-		"build": "eleventy",
+		"build": "npx @11ty/eleventy",
+		"serve": "npx @11ty/eleventy --serve",
 		"validate-frontmatter": "node _scripts/validate-frontmatter.js"
 	},
 	"dependencies": {
