@@ -304,6 +304,12 @@ above rely on.
    project's service account. We could not run it: impersonating a service account is Forbidden for
    this account on the workload cluster. Somebody with those rights should, and the result belongs
    in here.
+9. **We can show who edited a dashboard.** The sidecar already passes `X-Forwarded-User`, because
+   `-pass-user-headers` is a separate flag from the `--pass-basic-auth=false` we set. Tried with
+   Grafana 11.3: the name shows in the corner and in the dashboard history. Two settings are
+   needed. `[auth.proxy]` takes the name, `[users] auto_assign_org_role` decides the role, and
+   without the second a proxy user lands on `Viewer`, so `editable` would give out an Editor that
+   cannot edit. The role applies at creation only.
 
 ## See also
 
