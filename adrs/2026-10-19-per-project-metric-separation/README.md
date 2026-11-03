@@ -113,9 +113,12 @@ The supporting choices, each of which could be made differently:
 - **The CRs live in `user-projects`, not in a chart of their own.** A separate chart would hold a
   second copy of the project list and the two would drift. `user-projects` already owns the
   per-project loop.
-- **A route with an `oauth-proxy` sidecar**, the service account as the OAuth client. It reuses the
-  `project-<name>-edit` groups that exist anyway, needs no Keycloak client per project, and makes
-  route access and metric access test the same RBAC.
+- **A route with an `oauth-proxy` sidecar**, the service account as the OAuth client. Access is a
+  SubjectAccessReview for `services get` in the project's namespace, through `--openshift-sar` for
+  the cookie path and `--openshift-delegate-urls` for the bearer-token one. So whoever already has
+  `edit` in the project reaches the Grafana, no Keycloak client per project, and route access and
+  metric access test the same RBAC. Which group grants that `edit` is up to the project's values,
+  the chart does not fix a name.
 - **Opt-in, off by default.** A project without a `grafana:` block renders exactly as before, no
   pod and no quota used. Adding the template to the chart must not hand six existing projects a
   Grafana they never asked for.
