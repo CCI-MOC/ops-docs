@@ -74,16 +74,24 @@ on our clusters and stays there. Three reasons, only the first is about tenancy:
 1. **For the fleet view it is the right tool.** Seeing everything is the job of an operator
    dashboard, and that 9091 returns all namespaces is correct for this reader. The same property
    that makes it unusable for a project makes it usefull here.
-2. **Two ways in, for two kinds of user.** Somebody with cluster wide access gets dashboards in the
-   console that is open anyway, with nothing to deploy. A project gets its own Grafana. To give
-   people the choice is worth something by itself, and neither of the two has to serve both
-   audiences. This was never written down before, only "both now run, for different jobs" in the
-   notes from 2026-09-08, so this ADR is where it gets recorded.
+2. **Two ways in, for two kinds of user.** Somebody holding `cluster-monitoring-view` gets
+   dashboards in the console that is open anyway, with nothing to deploy. A project gets its own
+   Grafana. To give people the choice is worth something by itself, and neither of the two has to
+   serve both audiences.
 3. **It is already integrated.** `openshift/monitoring-plugin` depends on `@perses-dev/*` and
    renders the Dashboards tab with it, while Metrics and Alerting use Victory. So the console ships
    a dashboard surface either way, and enabling the UI plugin only exposes the tab.
 
 So this ADR is not "Grafana instead of Perses". It is both, for different views.
+
+The role is `cluster-monitoring-view`, and a project's own `view` is not enough for it. `view`
+grants `prometheuses` in the API group `monitoring.rhobs`, which are the custom resources, not
+`prometheuses/api` in `monitoring.coreos.com`, which is the data. So a project member can open the
+Dashboards tab and gets no metrics out of it. Measured with SubjectAccessReviews on the prod hub:
+true for a member of `open-accelerator-admins`, which holds the role through
+`open-accelerator-admins-cluster-monitoring-view`, false for an authenticated user outside it. The
+role is scoped with `resourceNames: ["k8s"]`, so a review that leaves the name out comes back false
+as well.
 
 ## Decision
 
