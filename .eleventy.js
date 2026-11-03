@@ -13,7 +13,7 @@ export default function (eleventyConfig) {
 	// Builds a collapsed, non-printing table of contents from the h2-h4
 	// headings (and their anchor ids, added by markdown-it-anchor above)
 	// found in a page's rendered content.
-	eleventyConfig.addShortcode("toc", function (content) {
+	eleventyConfig.addShortcode("toc", (content) => {
 		const headingRegex = /<h([234])\s[^>]*\bid="([^"]+)"[^>]*>(.*?)<\/h\1>/gis;
 		const headings = [];
 		let match;
