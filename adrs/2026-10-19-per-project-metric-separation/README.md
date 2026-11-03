@@ -128,8 +128,8 @@ The supporting choices, each of which could be made differently:
   project its own data without being edited. Write a panel once, every project that opts in gets it,
   and nobody has to maintain six copies that drift.
 - **No volume.** "No PVC" sounds like the metrics are not kept. They are, just not here: the
-  platform Prometheus on each workload cluster holds 15 days on a 32Gi volume, UWM another 20Gi,
-  and Grafana queries that through the tenancy port.
+  platform Prometheus on each workload cluster is configured for 15 days on a 50Gi volume, UWM
+  another 20Gi, and Grafana queries that through the tenancy port.
 
   Grafana does keep state of its own, in a database: users, datasources, dashboards, preferences.
   We run it without a volume anyway, which means everything we need comes back declaratively from
@@ -272,8 +272,10 @@ Prometheus mounts `emptyDir`, a project gets a dashboard that works and shows th
 Nothing in Grafana reports this, and Argo is green either way.
 
 That is a per-cluster property, so it has to be checked per cluster rather than assumed from this
-decision. Today the three workload clusters hold 15 days on a 32Gi volume, which is what the numbers
-above rely on.
+decision. The three workload clusters are configured alike, `retention: 15d`, `retentionSize: 40GiB`
+on a 50Gi volume, but what a project actually sees is the age of the volume. Measured 2026-11-03:
+prod-workload0 holds 15.7 days, dev-workload0 holds 6.4, because that cluster was rebuilt a week
+ago. The configuration is the ceiling, not the promise.
 
 ## Open points
 
