@@ -1,5 +1,5 @@
 ---
-title: Maintenance work on 11/17/2026
+title: Cumulus OS update on 11/17/2026
 owner: hakasapl
 target: All OAC and H100 nodes
 when: 2026-11-17T11:00:00-05:00
