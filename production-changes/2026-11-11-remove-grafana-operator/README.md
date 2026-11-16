@@ -2,7 +2,7 @@
 title: Remove the Grafana Operator from oac-prod-workload0
 owner: EldritchJS
 target: oac-prod-workload0
-when: 2026-11-11T10:00:00-05:00
+when: 2026-11-16T13:00:00-05:00
 ---
 
 ## Why
