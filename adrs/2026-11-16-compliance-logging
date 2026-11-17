@@ -1,0 +1,73 @@
+---
+title: Compliance Logging
+standards: [nist-si, nist-ra, nist-au]
+---
+
+## Context
+
+Logging is an overloaded term that this ADR attempts to clarify, and it proposes standard terminology as well as tool choices for each compliance need.
+
+### NIST Requirements
+
+From 800-171/800-53 Audit and Accountability (AU) comes a general need to retain logs in a central location (3.3.1) with identifying information for log events (3.3.2).
+
+From 171/53 Risk Assessment (RA) comes the need to do vulnerability scanning (3.11.2) and remediation (3.11.3).
+
+From 171/53 System and Information Integrity (SI) comes the need to protect against malware (3.14.2, 3.14.4, 3.14.5) and to monitor for security incidents (3.14.6, 3.14.7).
+
+SI 3.14.1 concerning "security flaws" and 3.14.3 concerning "security alerts and advisories" are a part of vulnerability scanning (3.11.2) and remediation (3.11.3) for the sake of this discussion.
+
+AU 3.3.5 concerning correlation of activity and 3.3.6 concerning reporting and reduction are part of centralized logging for the sake of this discussion.
+
+### Terminology
+
+Given the [NIST Requirements](#nist-requirements), compliance logging consists of three distinct use cases:
+
+- Incident Detection: Does suspicious behavior from someone or something come to our attention?
+- Vulnerability and Compliance Scanning: Does our security configuration continue to be correct?
+- Archive: Does a record of all security-related events persist?
+
+In this classification, here are some terms that fall under each of these three use cases:
+
+- Incident Detection:
+  - Security Information and Event Management (SIEM)
+  - Endpoint Detection and Response (EDR)
+  - Host-Based Intrusion Detection System (HIDS)
+  - Malware scanners
+  - Antivirus software
+  - Red Hat Advanced Cluster Security (threat detection and response)
+  - Wazuh
+  - AWS GuardDuty
+  - AWS OpenSearch Security Analytics
+- Vulnerability and Compliance Scanning:
+  - OpenShift Compliance Operator
+  - Red Hat Advanced Cluster Security (image and node scanning)
+  - AWS Inspector
+  - AWS Security Hub
+  - AWS Security Hub Cloud Security Posture Management (CSPM)
+- Archive:
+  - LokiStack
+  - Pure FlashBlade Object Store
+  - AWS CloudWatch
+  - AWS S3 Object Lock
+  - AWS Security Hub (correlation)
+
+### Technical Constraints
+
+We assume the Compliance Operator and RHACS for image and node scanning speak for all of scanning, but they only speak for vulnerability scanning, not for incident detection. Incident detection is just as important as a last-line defense against actual intrusion. Incident detection and vulnerability and compliance scanning protect each other; what we can't make impossible by configuration we detect at runtime, and the more we harden the configuration, the smaller the detection space becomes.
+
+We also assume the current effort to integrate the MOC 1.0 observability stack into MOC 1.0+ speaks for all of compliance logging, but it only speaks to the archive use case for vulnerability and compliance scanning, and that outside of AWS, for technical reasons related to the first assumption.
+
+So we need incident detection--what do OpenShift and on-prem offer, and what does AWS offer?
+
+## Decision
+
+What is the change that we're proposing and/or doing?
+
+## Consequences
+
+What becomes easier or more difficult to do because of this change?
+
+## See also
+
+List here links to supporting documentation, related ADRs or RFCs, etc.
