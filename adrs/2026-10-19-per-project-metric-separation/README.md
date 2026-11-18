@@ -135,18 +135,12 @@ The supporting choices, each of which could be made differently:
   We run it without a volume anyway, which means everything we need comes back declaratively from
   the CRs after a restart, and anything else is allowed to be lost. **That has a consequence for
   projects: a dashboard built in the UI does not survive.** Dashboards belong in git. If a project
-  needs to keep its own, this is the point to revisit. A project that needs Explore or wants to
-  keep its own dashboards sets `grafana.editable: true`. That switches the anonymous role to Editor
-  and adds a 512Mi volume, rollout `Recreate` because the volume is ReadWriteOnce. Editor and
-  volume come together on purpose: an Editor saving into `emptyDir` loses everything with the next
-  pod. Neither Viewer nor Editor may change datasources in Grafana OSS, that is org admin only, so
-  the tenancy is unaffected.
+  needs to keep its own, it adds them to the chart. An opt-in for editing in the UI existed for a
+  while and was dropped again in CCI-MOC/oac-apps#247.
 - **No alerting in Grafana**, a separate decision from the volume. Alerting belongs to the
   platform: Prometheus evaluates `PrometheusRule`, Alertmanager routes what fires, both already
   running and both tenant-aware. Grafana alerting would be a second path next to the one OpenShift
-  ships. With `editable` it is switched off in the config as well
-  (`unified_alerting.enabled: "false"`), for a second reason: an Editor could add a webhook contact
-  point, and Grafana would send it from inside the cluster with open egress.
+  ships, so it is switched off in the config (`unified_alerting.enabled: "false"`).
 - **A community operator, knowingly.** `grafana-operator` v5 only ships in `community-operators`,
   while every other operator here comes from `redhat-operators`. This is a deliberate exception. The
   fallback, if community support turns out to be unacceptable for something projects rely on, is a
@@ -258,9 +252,8 @@ view, Grafana per project on 9092. Intended, and still real operational work: tw
 two things to explane. One correction to how I put it earlier: 9091 on a workload cluster shows that
 cluster, not the fleet. The fleet view is the hub's.
 
-**With `editable`, everybody who passes the proxy is the same anonymous Editor.** That includes
-`open-accelerator-admins` through `cluster-reader`, and project members who only have view. Changes
-cannot be attributed to a person.
+**Dashboards are read only in the GUI.** They come from git, and an anonymous Editor could not be
+held to a change, so editing was dropped in CCI-MOC/oac-apps#247.
 
 **We depend on a community operator** for something projects use directly. Known, accepted, with a
 named fallback.
@@ -296,8 +289,8 @@ ago. The configuration is the ceiling, not the promise.
    `grafana/grafana:11.3.0`: the export mounts `nfsvers=4.1` with no `nolock`, the pod reports
    `local_lock=none`, the database was created and the migrations ran, and after deleting the pod the
    new one reopened the same file and logged `migrations completed, performed=602, skipped=6`. No
-   stale lock. What is still untested is a real project with `editable: true` and somebody actually
-   saving dashboards, rather than one pod cycled by hand.
+   stale lock. Nothing writes to that database any more since editing was dropped, so this stays a
+   measurement rather than something we depend on.
 7. **Nothing warns when the platform Prometheus below a project has no volume.** The dashboard looks
    healthy and the panels are simply short. A check on the cluster, or a panel that shows the oldest
    sample it can see, would make it visible. Neither exists.
@@ -306,12 +299,6 @@ ago. The configuration is the ceiling, not the promise.
    project's service account. We could not run it: impersonating a service account is Forbidden for
    this account on the workload cluster. Somebody with those rights should, and the result belongs
    in here.
-9. **We can show who edited a dashboard.** The sidecar already passes `X-Forwarded-User`, because
-   `-pass-user-headers` is a separate flag from the `--pass-basic-auth=false` we set. Tried with
-   Grafana 11.3: the name shows in the corner and in the dashboard history. Two settings are
-   needed. `[auth.proxy]` takes the name, `[users] auto_assign_org_role` decides the role, and
-   without the second a proxy user lands on `Viewer`, so `editable` would give out an Editor that
-   cannot edit. The role applies at creation only.
 
 ## See also
 
