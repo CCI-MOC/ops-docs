@@ -1,13 +1,25 @@
 ---
-title: Compliance Logging
+title: Logging Requirements and Tool Choices
 standards: [nist-si, nist-ra, nist-au]
 ---
 
 ## Context
 
-Logging is an overloaded term that this ADR attempts to clarify, and it proposes standard terminology as well as tool choices for each compliance need.
+Logging is an overloaded term that this ADR attempts to clarify, and it separates logging into three separate requirements, three specific requirements within compliance, and two separate environments.
 
-### NIST Requirements
+For each combination of requirement and environment, this ADR either captures tool choices where a tool is already deployed or proposes a single solution where no deployment exists.
+
+### Logging Requirements
+
+There are three things we are talking about when talk about logging:
+
+1. Logging for operational needs. Is the cluster up; has the hardware failed?
+2. Logging for billing: Who is using what resource, and how much does it cost them?
+3. Logging for compliance: Does an audit log exist? Is the environment compliant, and is behavior in that environment compliant, too?
+
+#### Compliance Logging
+
+##### NIST Controls
 
 From 800-171/800-53 Audit and Accountability (AU) comes a general need to retain logs in a central location (3.3.1) with identifying information for log events (3.3.2).
 
@@ -19,13 +31,13 @@ SI 3.14.1 concerning "security flaws" and 3.14.3 concerning "security alerts and
 
 AU 3.3.5 concerning correlation of activity and 3.3.6 concerning reporting and reduction are part of centralized logging for the sake of this discussion.
 
-### Terminology
+##### Compliance Logging Requirements
 
-Given the [NIST Requirements](#nist-requirements), compliance logging consists of three distinct use cases:
+Given the [NIST Controls](#nist-controls), compliance logging consists of three distinct use cases:
 
 - Incident Detection: Does suspicious behavior from someone or something come to our attention?
-- Vulnerability and Compliance Scanning: Does our security configuration continue to be correct?
-- Archive: Does a record of all security-related events persist?
+- Vulnerability and Compliance Scanning: Does the configuration of our environment continue to be correct?
+- Archive: Does a record of all compliance-related events persist?
 
 In this classification, here are some terms that fall under each of these three use cases:
 
@@ -52,7 +64,7 @@ In this classification, here are some terms that fall under each of these three 
   - AWS S3 Object Lock
   - AWS Security Hub (correlation)
 
-### Technical Constraints
+##### Technical Constraints for Compliance Logging
 
 We assume the Compliance Operator and RHACS for image and node scanning speak for all of scanning, but they only speak for vulnerability scanning, not for incident detection. Incident detection is just as important as a last-line defense against actual intrusion. Incident detection and vulnerability and compliance scanning protect each other; what we can't make impossible by configuration we detect at runtime, and the more we harden the configuration, the smaller the detection space becomes.
 
