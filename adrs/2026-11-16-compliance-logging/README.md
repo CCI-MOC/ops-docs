@@ -55,12 +55,19 @@ In this classification, here are some terms that fall under each of these three 
   - OpenShift Compliance Operator
   - Red Hat Advanced Cluster Security (image and node scanning)
   - AWS Inspector
-  - AWS Security Hub
   - AWS Security Hub Cloud Security Posture Management (CSPM)
 - Archive:
   - LokiStack
   - Pure FlashBlade Object Store
   - AWS CloudWatch
+  - AWS CloudTrail
+  - AWS Config
+  - AWS VPC Flow Logs
+  - AWS Route53 query logs
+  - AWS EKS logs
+  - AWS WAF logs
+  - AWS Elastic Load Balancing logs
+  - AWS S3
   - AWS S3 Object Lock
   - AWS Security Hub (correlation)
 
