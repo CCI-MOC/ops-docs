@@ -71,14 +71,6 @@ In this classification, here are some terms that fall under each of these three 
   - AWS S3 Object Lock
   - AWS Security Hub (correlation)
 
-##### Technical Constraints for Compliance Logging
-
-We assume the Compliance Operator and RHACS for image and node scanning speak for all of scanning, but they only speak for vulnerability scanning, not for incident detection. Incident detection is just as important as a last-line defense against actual intrusion. Incident detection and vulnerability and compliance scanning protect each other; what we can't make impossible by configuration we detect at runtime, and the more we harden the configuration, the smaller the detection space becomes.
-
-We also assume the current effort to integrate the MOC 1.0 observability stack into MOC 1.0+ speaks for all of compliance logging, but it only speaks to the archive use case for vulnerability and compliance scanning, and that outside of AWS, for technical reasons related to the first assumption.
-
-So we need incident detection--what do OpenShift and on-prem offer, and what does AWS offer?
-
 ## Decision
 
 What is the change that we're proposing and/or doing?
