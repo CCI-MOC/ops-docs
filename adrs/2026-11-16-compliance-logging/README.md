@@ -87,3 +87,5 @@ What becomes easier or more difficult to do because of this change?
 [SOC Prime](https://socprime.com/)
 [Sigma Backends](https://sigmahq.io/docs/digging-deeper/backends)
 [Loki backend for pySigma](https://github.com/grafana/pySigma-backend-loki)
+[AWS Security Incident Response Guide (2019)](https://d1.awsstatic.com/WWPS/pdf/aws_security_incident_response.pdf)
+[AWS Security Incident Response Guide (2020)](https://d1.awsstatic.com/whitepapers/aws_security_incident_response.pdf)
