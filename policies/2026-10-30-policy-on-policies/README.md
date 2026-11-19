@@ -79,7 +79,7 @@ MOC, Boston University (BU), and Red Hat (RH) each designate one approver for po
 
 - All three institutions must approve. There is no majority: a policy cannot merge while any institution has not approved it, and no institution's approval may be substituted or waived by the others.
 - The approver recording an institution's approval must not be the author of the pull request. If the author is that institution's designated approver, the institution designates an alternate approver for that pull request.
-- The pull request must remain open for at least ten business days after it has been announced to all three institutions, so that people who are not approvers have the opportunity to read and comment on it. A substantive change to the normative text restarts that period; an editorial correction does not.
+- The pull request must remain open for at least five business days after it has been announced to all three institutions, so that people who are not approvers have the opportunity to read and comment on it. A substantive change to the normative text restarts that period; an editorial correction does not.
 - A request for changes from any approver blocks the merge until that same approver withdraws it. Other approvers may not dismiss it on their behalf.
 
 Once the last institution has approved, and before the pull request merges, the proposer makes a final commit recording the approval in the Version History table: the date approval completed, the type of change, a short description, and the pull request number in place of any `Pending` placeholder. The steps are summarised under [Approving a policy](../../#approving-a-policy) in the repository README.
