@@ -5,7 +5,7 @@ import markdownItGithubAlerts from "markdown-it-github-alerts";
 export default function (eleventyConfig) {
 	eleventyConfig.addPassthroughCopy("_assets");
 
-	const markdownLibrary = markdownIt({ html: true })
+	const markdownLibrary = markdownIt({ html: true, typographer: true })
 		.use(markdownItGithubAlerts)
 		.use(markdownItAnchor, { level: [2, 3, 4] });
 	eleventyConfig.setLibrary("md", markdownLibrary);
@@ -13,7 +13,7 @@ export default function (eleventyConfig) {
 	// Builds a collapsed, non-printing table of contents from the h2-h4
 	// headings (and their anchor ids, added by markdown-it-anchor above)
 	// found in a page's rendered content.
-	eleventyConfig.addShortcode("toc", function (content) {
+	eleventyConfig.addShortcode("toc", (content) => {
 		const headingRegex = /<h([234])\s[^>]*\bid="([^"]+)"[^>]*>(.*?)<\/h\1>/gis;
 		const headings = [];
 		let match;

@@ -83,7 +83,7 @@ export default {
 			"171: 3.14 SYSTEM AND INFORMATION INTEGRITY 3.14.1 Patch, 3.14.2 SIEM/EDR/AV, 3.14.3 CVE",
 		url: "https://csf.tools/reference/nist-sp-800-53/r5/si/",
 	},
-	hippa: {
+	hipaa: {
 		label: "HIPAA",
 		description: "HIPAA compliance related",
 	},

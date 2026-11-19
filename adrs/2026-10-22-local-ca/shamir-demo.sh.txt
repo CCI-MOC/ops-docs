@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# This script demonstrates using Shamir secret sharing to shard a secret, then
+# reassemble the secret from a subset of those shards. There are a
+# number of tools that can be used to perform the sharding/recovery
+# operation:
+#
+# - `ssss` is packaged in Fedora, but was last updated in 2006 and
+#   generates output with decorative text that requires post-processing
+#   in shell scripts.
+#
+# - `ssss-rs` is a Rust-based modern alternative that has seen updates
+#    in the past year and is designed for use in scripts.
+#
+# This script is built to work with `ssss-rs`.
+
+set -eu -o pipefail
+
+# Generate a 4096 bit RSA key. This models a certificate signing key.
+echo "Generating secret signing key..."
+openssl genrsa 4096 >sign.pem
+
+# Generate a random encryption key. This key is deleted after we shard
+# the encryption key and use it to encrypt the signing key. It is
+# never exposed to a person.
+echo "Generating encryption key..."
+openssl rand -hex 64 >encrypt.key
+
+# Shard the key into three shares, and require two shares to
+# reconstruct the key.
+echo "Splitting the encryption key..."
+ssss-rs split -s 3 -t 2 -i- <encrypt.key >encrypt.split
+
+echo "Encrypting the signing key..."
+openssl pkey -in sign.pem -aes256 -out sign.pem.enc -passout file:encrypt.key
+
+echo "Deleting the encryption key..."
+rm -f encrypt.key
+
+# Reconstruct the encryption key from two random shares.
+echo "Re-assembling the encryption key from parts..."
+ssss-rs combine -s $(shuf -n2 encrypt.split) >encrypt.restored
+
+# Confirm that the reconstructed key successfully decrypts the signing
+# key.
+echo "Decrypting the private key..."
+openssl pkey -in sign.pem.enc -passin file:encrypt.restored -out sign.restored

@@ -1,0 +1,125 @@
+#!/bin/bash
+
+set -euo pipefail
+
+[ $# -ge 1 ] || {
+  echo "ERROR: missing address" >&2
+  exit 1
+}
+IP="$1"
+CN="${2:-$IP}"
+
+USER="${XCC_USER:-root}"
+PASS="${XCC_PASSWORD:?Set XCC_PASSWORD environment variable}"
+
+CSR_COUNTRY="${CSR_COUNTRY:-US}"
+CSR_STATE="${CSR_STATE:-MA}"
+CSR_CITY="${CSR_CITY:-Boston}"
+CSR_ORG="${CSR_ORG:-Mass Open Cloud}"
+CSR_ORG_UNIT="${CSR_ORG_UNIT:-IT}"
+
+STEP_CA_URL="${STEP_CA_URL:?Set STEP_CA_URL environment variable}"
+STEP_CA_FINGERPRINT="${STEP_CA_FINGERPRINT:?Set STEP_CA_FINGERPRINT environment variable}"
+STEP_PROVISIONER="${STEP_PROVISIONER:?Set STEP_PROVISIONER environment variable}"
+STEP_PROVISIONER_PASSWORD_FILE="${STEP_PROVISIONER_PASSWORD_FILE:?Set STEP_PROVISIONER_PASSWORD_FILE environment variable}"
+
+CSR_FILE="${IP}.csr"
+CERT_FILE="${IP}.crt"
+
+BASE_URL="https://${IP}/redfish/v1"
+CURL=(curl -sk -u "${USER}:${PASS}")
+
+echo "[*] Bootstrapping trust with step-ca at ${STEP_CA_URL}..."
+step ca bootstrap -f \
+  --ca-url "$STEP_CA_URL" \
+  --fingerprint "$STEP_CA_FINGERPRINT"
+
+echo "[*] Looking up HTTPS certificate resource on ${IP}..."
+cert_uri=$("${CURL[@]}" "${BASE_URL}/CertificateService/CertificateLocations" |
+  jq -r '.Links.Certificates[0]."@odata.id" // empty')
+
+if [ -z "$cert_uri" ]; then
+  echo "Could not determine certificate URI from CertificateLocations" >&2
+  exit 1
+fi
+echo "[*] Target certificate resource: ${cert_uri}"
+
+collection_uri="${cert_uri%/*}"
+
+echo "[*] Requesting CSR from ${IP} (CN=${CN})..."
+# XCC defaults to an EC P-384 key, which this XCC's "Standard" security
+# mode then refuses to accept back via ReplaceCertificate ("the
+# certificate is weak by current security mode"). Request RSA explicitly
+# to avoid that.
+csr_response=$("${CURL[@]}" \
+  -H "Content-Type: application/json" \
+  -X POST \
+  -d "$(jq -n \
+    --arg cn "$CN" \
+    --arg ip "$IP" \
+    --arg coll "$collection_uri" \
+    --arg country "$CSR_COUNTRY" \
+    --arg state "$CSR_STATE" \
+    --arg city "$CSR_CITY" \
+    --arg org "$CSR_ORG" \
+    --arg orgunit "$CSR_ORG_UNIT" \
+    '{CommonName: $cn, AlternativeNames: [$ip], CertificateCollection: {"@odata.id": $coll},
+          Country: $country, State: $state, City: $city,
+          Organization: $org, OrganizationalUnit: $orgunit,
+          KeyPairAlgorithm: "TPM_ALG_RSA", KeyBitLength: 2048}')" \
+  "${BASE_URL}/CertificateService/Actions/CertificateService.GenerateCSR")
+
+csr=$(jq -r '.CSRString // empty' <<<"$csr_response")
+if [ -z "$csr" ]; then
+  echo "Failed to generate CSR. Response was:" >&2
+  echo "$csr_response" >&2
+  exit 1
+fi
+
+printf '%s\n' "$csr" >"$CSR_FILE"
+echo "[*] CSR saved to $CSR_FILE"
+
+# XCC always embeds its own DNS/IP identities in a generated CSR (e.g. its
+# bare hostname, FQDN, and a link-local IPv6 name/address) on top of the
+# CN/IP requested above. step-ca's JWK provisioner requires the token's
+# authorized SANs to cover every SAN actually present in the CSR, so
+# enumerate them from the CSR itself rather than assuming only $CN/$IP are
+# present - names outside the CA's allowed domains/ranges are dropped by
+# the provisioner's x509 template, not by what's authorized here.
+mapfile -t csr_sans < <(openssl req -in "$CSR_FILE" -noout -text |
+  grep "X509v3 Subject Alternative Name" -A1 | tail -n1 |
+  tr ',' '\n' | sed -E 's/^\s*(DNS|IP Address):\s*//')
+
+san_args=()
+for san in "${csr_sans[@]}"; do
+  san_args+=(--san "$san")
+done
+
+echo "[*] Requesting signing token from step-ca (provisioner=${STEP_PROVISIONER})..."
+token=$(step ca token "$CN" \
+  "${san_args[@]}" \
+  --provisioner "$STEP_PROVISIONER" \
+  --provisioner-password-file "$STEP_PROVISIONER_PASSWORD_FILE")
+
+echo "[*] Signing CSR with step-ca..."
+# --force must come after the positional args: this step CLI build
+# mis-parses "step ca sign -f csr-file crt-file" as too many positional
+# arguments. Without it, signing fails non-interactively (no tty to
+# prompt on) if $CERT_FILE already exists from a prior run.
+step ca sign "$CSR_FILE" "$CERT_FILE" --force --token "$token"
+echo "[*] Signed certificate chain saved to $CERT_FILE"
+
+echo "[*] Uploading certificate to ${IP}..."
+payload=$(jq -n \
+  --rawfile cert "$CERT_FILE" \
+  --arg uri "$cert_uri" \
+  '{CertificateString: $cert, CertificateType: "PEM", CertificateUri: {"@odata.id": $uri}}')
+
+response=$("${CURL[@]}" \
+  -H "Content-Type: application/json" \
+  -X POST \
+  -d "$payload" \
+  "${BASE_URL}/CertificateService/Actions/CertificateService.ReplaceCertificate")
+
+echo "[*] Upload response:"
+jq . <<<"$response" 2>/dev/null || echo "$response"
