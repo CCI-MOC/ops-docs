@@ -21,11 +21,13 @@ This Secure Software Development Life Cycle (SDLC) policy is a supporting docume
 
 MOC operates as a cloud service provider. This policy applies to code, infrastructure-as-code (IaC), configuration, container images, deployment mechanisms, and engineering personnel for the platform that MOC builds and operates. Code that handles CUI on behalf of a tenant is the tenant's responsibility under the shared responsibility model described in the SSP, and is not governed by this policy.
 
+For a more in-depth definition of what falls in scope please refer to the [CMMC Scoping Guide for Level 2](https://dodcio.defense.gov/Portals/0/Documents/CMMC/ScopingGuideL2v2.pdf). 
+
 ### 1.2 CUI Boundary, Deployment Model & External Systems
 
 * **Platform:** The platform consists of an on-premises OpenShift cluster and foundational services (for example Keycloak and LDAP) on Amazon EKS in AWS. Both are within the CUI boundary. The SSP describes the architecture, the boundary, and the network path between them.
-* **Deployment Model:** CI/CD does not deploy to production. Jobs running inside the CUI boundary, pull approved configuration from the public and private GitHub repositories and apply it to production, including the on-premises OpenShift cluster (see Section 6.1).
-* **GitHub as an External System:** GitHub (including GitHub Actions) is not an in-scope external system for the purposes of NIST SP 800-171 3.1.20. It holds no authorization to change production and no credentials for production or for anything inside the CUI boundary. [TBD: confirm.] Controls on what reaches the branches that are pulled into production are described in Sections 3 and 6.1.
+* **Deployment Model:** CI/CD does not deploy to production. ArgoCD and on-prem GitHub runners within the CUI boundary pull approved configuration from the public and private GitHub repositories and apply it to production, including the on-premises OpenShift cluster (see Section 6.1).
+* **GitHub as an External System:** GitHub (including GitHub Actions) is not an in-scope external system for the purposes of NIST SP 800-171 3.1.20. It holds no authorization to change production and no credentials for production or for anything inside the CUI boundary. Controls on what reaches the branches that are pulled into production are described in Sections 3 and 6.1.
 
 ### 1.3 Relationship to the SSP and Related Policies
 
@@ -48,10 +50,10 @@ MOC operates as a cloud service provider. This policy applies to code, infrastru
 
 ### 2.3 Source Control & Repository Access (NIST SP 800-171 Rev 2: 3.1.1, 3.1.5, 3.5.3)
 
-* **Repositories:** Source code and configuration repositories are hosted under GitHub Enterprise. Configuration is split into public and private repositories. Public repositories store public manifests with templated placeholders for sensitive information such as IP addresses. Private repositories store the sensitive configuration. Public repositories must not contain CUI, credentials, or environment-specific sensitive configuration (for example account identifiers, IP addresses, network topology, or realm and directory configuration). Private repositories must not contain CUI or credentials. [TBD: state who can read the private repositories, and how public repositories are checked for placeholders only (for example CI scanning or a pre-publication review).]
+* **Repositories:** Source code and configuration repositories are hosted under GitHub Enterprise. Configuration is split into public and private repositories. Public repositories store public manifests with templated placeholders for sensitive information such as IP addresses. Private repositories store the sensitive configuration. Public repositories must not contain CUI, credentials, or environment-specific sensitive configuration (for example account identifiers, IP addresses, network topology, or realm and directory configuration). Private repositories must not contain CUI or credentials.
 * **Authentication:** Multi-Factor Authentication (MFA) is enforced across the entire GitHub organization for all members.
 * **Authorization:** Role-Based Access Control (RBAC) is managed via GitHub Teams, granting least-privilege access to specific project repositories.
-* **Actions on Forks:** GitHub Actions workflows never run on forks when they contain secrets. Where workflows do contain secrets, those secrets are never for anything within the CUI boundary.
+* **Actions on Forks:** GitHub Actions workflows running on forks are prevented by GitHub from having access to the secrets in a repository.
 
 ### 2.4 Separation of Duties & Process Identities (NIST SP 800-171 Rev 2: 3.1.4, 3.1.5, 3.5.2)
 
@@ -64,14 +66,14 @@ MOC operates as a cloud service provider. This policy applies to code, infrastru
 ### 3.1 Baselines & Source Control (NIST SP 800-171 Rev 2: 3.4.1)
 
 * **Version Control System:** Git is used for all code, scripts, and infrastructure configuration files. Configuration in Git is the baseline for production.
-* **Branch Protection Policies:** Direct commits or force pushes to the primary production branch (main) are disabled.
+* **Branch Protection Policies:** Direct commits or force pushes to the primary production branch (main) are limited to emergency situations and require the same approval workflow as production changes.
 * **Build Verification:** CI test suites must pass successfully prior to merging any pull request (PR).
 
 ### 3.2 Security Configuration Settings (NIST SP 800-171 Rev 2: 3.4.2)
 
-* Because all changes flow through GitHub, security configuration settings are defined in code in the repositories, validated in CI by **Checkov** (Terraform in moc-aws), and applied to production only by the pull-based mechanism in Section 6.1. Settings in production are therefore those that were reviewed and merged.
+* Because all changes flow through GitHub, security configuration settings are defined in code in the repositories, validated in CI by **Checkov** (OpenTofu in moc-aws), and applied to production only by the pull-based mechanism in Section 6.1. Settings in production are therefore those that were reviewed and merged.
 * Each platform component has a documented hardening benchmark, listed in the SSP. Configuration in the repositories implements it.
-* Differences between Git and production are detected and corrected. [TBD: how drift is detected and reverted.]
+* Differences between Git and production are [detected and corrected](https://github.com/CCI-MOC/ops-docs/pull/59).
 
 ### 3.3 Change Approval Process (NIST SP 800-171 Rev 2: 3.4.3)
 
@@ -80,7 +82,7 @@ MOC operates as a cloud service provider. This policy applies to code, infrastru
 * These rules apply to both the public and the private configuration repositories.
 * Branch protection rules apply to administrators, with no bypass list. Required approvals are dismissed when new commits are pushed.
 * A CODEOWNERS file requires review by designated security reviewers for security-sensitive paths (for example authentication, cryptography, network, logging, and boundary configuration).
-* All peer reviews, comments, and approvals are permanently logged within the GitHub repository pull request audit record.
+* All peer reviews, comments, and approvals are permanently logged within the GitHub repository pull request.
 
 ### 3.4 Security Impact Analysis (NIST SP 800-171 Rev 2: 3.4.4)
 
@@ -116,12 +118,12 @@ Does this change affect any of the following? (Yes / No, with a note for each Ye
 ### 3.6 Least Functionality & Software Execution Control (NIST SP 800-171 Rev 2: 3.4.6, 3.4.7, 3.4.8)
 
 * **Permit-by-exception for images (3.4.8):** EKS and OpenShift refuse to run unsigned or unverified container images (Section 6.1).
-* **GitHub Actions:** Third-party actions are pinned to a full commit SHA and restricted to an approved list at the organization level. [TBD: confirm.]
-* **Images (3.4.6, 3.4.7):** Container images are built from minimal base images and expose only the ports, services, and protocols they require. [TBD: confirm.]
+* **GitHub Actions:** Third-party actions are pinned to a full commit SHA and restricted to an approved list at the organization level.
+* **Images (3.4.6, 3.4.7):** Container images are built from minimal base images and expose only the ports, services, and protocols they require.
 
 ### 3.7 Software Inventory & Dependency Management (NIST SP 800-171 Rev 2: 3.4.1)
 
-* **Python:** Dependencies are pinned to explicit versions with hashes (`pip install --require-hashes`) in requirements files. [TBD: confirm.]
+* **Python:** Dependencies are pinned to a specific crytpographic hash by the `uv.lock` package lockfile.
 * **Terraform/OpenTofu:** Provider and module versions are pinned, and dependency lock files (`.terraform.lock.hcl`) are committed.
 * **Containers and operators:** Base images are referenced by digest. Operators and Helm charts are pinned to specific versions.
 * **GitHub Actions:** Pinned by commit SHA (Section 3.6).
@@ -131,7 +133,7 @@ Does this change affect any of the following? (Yes / No, with a note for each Ye
 
 ### 4.1 Secure Coding Standards (NIST SP 800-171 Rev 2: 3.13.2)
 
-* Python development teams must adhere to the **OpenSSF Secure Coding One Stop Shop for Python** guidelines.
+* Development teams must adhere to the **OpenSSF Secure Coding One Stop Shop for Python** guidelines or an equivalent guide when Python is not used.
 * Key mandatory practices include strict input validation, safe deserialization, parameterization of SQL/ORM queries, context-aware output encoding, and secure memory handling.
 
 ### 4.2 Automated Security Scanning (NIST SP 800-171 Rev 2: 3.11.2, 3.14.1)
@@ -140,7 +142,7 @@ Does this change affect any of the following? (Yes / No, with a note for each Ye
   * Software Composition Analysis (SCA) vulnerabilities in dependencies (Trivy).
   * Known vulnerabilities (CVEs) in container base images (Trivy).
   * Misconfigurations in container and IaC configuration (Trivy and Checkov). Checkov checks the Terraform in moc-aws.
-  * Secrets committed to repositories (Trivy secret scanning). [TBD: confirm, and consider GitHub secret scanning with push protection.]
+  * Secrets committed to repositories (Trivy and/or GitHub secret scanning).
 * **Static application security testing (SAST):** Trivy does not provide SAST. [TBD: select a SAST tool for Python, for example Bandit, Semgrep, or CodeQL.]
 * **Rescans:** Deployed images and dependencies are rescanned on a schedule, not only on PRs and builds, so that newly published vulnerabilities are identified. [TBD: define the frequency (for example daily) and tooling.]
 * Vulnerability scanning of the running platform is part of the vulnerability management program described in the SSP.
@@ -175,7 +177,7 @@ Vulnerability (CVE) management is governed by the [BU Vulnerability Management S
 
 * **Key rotation:** Customer-managed cryptographic keys (AWS KMS) are rotated automatically at least every **90 days**.
 * **Separation of duties:** Individuals who administer keys (create, change policy, schedule deletion) are not the same individuals who use keys to encrypt or decrypt data, and no single individual can both change a key policy and use the key. Key policies are managed in code and changed only through the process in Section 3.3.
-* **Certificates:** TLS/SSL certificates are provisioned and managed via **AWS Certificate Manager (ACM)** or automated via **Let's Encrypt**, with automated renewal. For systems for which we cannot get public certificates we deploy and manage self-signed certificates. [TBD: link to ADR for self-signed certificates once it merges]
+* **Certificates:** TLS/SSL certificates are provisioned and managed via **AWS Certificate Manager (ACM)** or automated via **Let's Encrypt**, with automated renewal. For systems for which we cannot get public certificates we [deploy and manage self-signed certificates](https://ops-docs.massopen.cloud/adrs/2026-10-22-local-ca/).
 * Key compromise, revocation, and deletion procedures are documented in the SSP.
 
 ### 5.3 Cryptographic Protection (NIST SP 800-171 Rev 2: 3.13.8, 3.13.11, 3.13.16)
@@ -191,7 +193,7 @@ Vulnerability (CVE) management is governed by the [BU Vulnerability Management S
 * Container images are built automatically via GitHub Actions upon publishing a formal GitHub release tag.
 * Container images are cryptographically signed using **Sigstore** to guarantee supply chain integrity and provenance.
 * **EKS and OpenShift refuse to run unsigned or unverified images.** [TBD: the trusted signing identity, and how it is rotated or revoked if compromised.] The SSP documents the enforcement mechanism on each platform.
-* **Pull-based deployment:** CI/CD does not deploy to production. Jobs running inside the CUI boundary pull the approved configuration from the protected branches of the public and private repositories and apply it to production, including the on-premises OpenShift cluster. [TBD: confirm how Terraform/OpenTofu changes are applied, and whether the jobs verify commit or tag signatures.]
+* **Pull-based deployment:** CI/CD does not deploy to production. ArgoCD and GitHub on-prem runners within the CUI boundary pull the approved configuration from the protected branches of the public and private repositories and apply it to production, including the on-premises OpenShift cluster.
 
 ### 6.2 Audit Trail (NIST SP 800-171 Rev 2: 3.3.1, 3.3.2)
 
@@ -265,13 +267,10 @@ This matrix lists the requirements that this SDLC policy supports. It is not a c
 
 1. SSP link; document owner, approver, review cycle, and roles (Header, 7.5).
 2. Confirm GitHub is out of scope for 3.1.20 (1.2).
-3. Who can read the private repositories; how public repositories are checked for placeholders only (2.3).
-4. Drift detection (3.2); emergency change process (3.4); change access restrictions (3.5).
-5. Confirm Actions pinning and allow-list, and minimal images (3.6); confirm Python hashes; Keycloak and LDAP dependency controls (3.7).
-6. SAST tool selection; secret scanning confirmation; rescan frequency (4.2).
-7. Confirm the mapping of BU Moderate to CVSS Medium, and KEV handling (4.3).
-8. Trusted signing identity and its revocation; how Terraform/OpenTofu is applied; whether the jobs verify commit or tag signatures (6.1).
-9. GitHub audit log destination (6.2).
+4. SAST tool selection; rescan frequency (4.2).
+5. Confirm the mapping of BU Moderate to CVSS Medium, and KEV handling (4.3).
+6. Trusted signing identity and its revocation; do we need signed commits (6.1).
+7. GitHub audit log destination (6.2).
 
 ## 10\. References
 
@@ -283,3 +282,4 @@ This matrix lists the requirements that this SDLC policy supports. It is not a c
 * [BU Vulnerability Management Standard](https://www.bu.edu/policies/vulnerability-management-standard/)
 * [BU Cyber Incident Response Policy](https://www.bu.edu/policies/cyber-incident-response-policy/)
 * [NIST SP 800-171 Rev 2](https://csrc.nist.gov/pubs/sp/800/171/r2/upd1/final)
+* [CMMC Scoping Guide - Level 2](https://dodcio.defense.gov/Portals/0/Documents/CMMC/ScopingGuideL2v2.pdf)
