@@ -52,6 +52,7 @@ pull request. What cannot be edited is the shape:
 |-----------|--------|-----|
 | allowlist | yes    | yes |
 | drop list | **no** | yes |
+
 - MCO: Multi Cluster Observability
 - COO: Cluster Observability Operator
 
@@ -115,7 +116,6 @@ checking whether explicit selection is still the right model, which is what this
   of them, from two ServiceMonitors scraping the same pods. A naive `count by (cluster)` counts those
   series, not distinct subjects, and so overcounts when read as a count of them. Query patterns in
   [querying.md](querying.md).
-
 
 ## Decision
 
@@ -191,7 +191,6 @@ Hence the rule: **a pattern is a convenience, never the only thing standing betw
 we need.** A metric something depends on — a dashboard, an alert, billing — gets named. If the
 pattern stops working, the fallback is more entries in `names:`, documented and already rendered by
 the chart, and the decision above stands unchanged.
-
 
 ### What would make us revisit
 
