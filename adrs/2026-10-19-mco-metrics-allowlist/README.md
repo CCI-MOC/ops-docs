@@ -19,9 +19,9 @@ Nearly every argument pins `__name__` to one exact value:
 --match={__name__="acm_managed_cluster_labels"}
 ```
 
-A metric no selector matches does not get filtered out. It is never asked for. The collector has no
-`--drop`, no `--exclude` and no `--relabel`, so selection happens by asking rather than by filtering
-what was scraped.
+A metric that no selector matches never reaches the hub, not because it is filtered out but because
+it is never requested. The collector has no `--drop`, no `--exclude` and no `--relabel`, so selection
+happens by asking rather than by filtering what was scraped.
 
 The visible `--match` arguments do not describe the complete effective selection, though. A pattern
 we put in the custom allowlist caused additional metrics to arrive without changing those arguments
@@ -171,9 +171,6 @@ This is also where the HCP drop list does **not** apply. `sre-metric-set` govern
 ServiceMonitors on the hub, not project exporters in UWM, so nothing about it would change if local
 collection were narrowed. The two are separate levers and the argument for keeping local collection
 broad rests on UWM alone.
-
-Ownership matches the split: the control plane is ours to run but the vendor's to shape, and the drop
-list is the shape it ships with. What each cluster sends to the hub is our selection.
 
 Not in scope: what the HCP `metrics-proxy` fetches on the hub-to-hosted-cluster hop. That list is
 pinned by the operator, a transport limit rather than a selection one.
