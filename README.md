@@ -65,16 +65,66 @@ The [`policies`](policies) directory contains documentation on policies that we 
 1. Copy the policy template to a new subdirectory of [`policies`](policies). The new directory name should have the format `YYYY-mm-dd-title`, so for example:
 
     ```sh
-    cp -a templates/policy policy/2026-10-15-adr-approval-process
+    cp -a templates/policy policies/2026-10-15-adr-approval-process
     ```
 
 2. Edit the `README.md` file in the new directory to create your policy.
 
 3. Submit a pull request with your changes.
 
-### Approval
+### Approving a policy
 
-TBD.
+This section summarises the process defined by the
+[Policy on Policies](policies/2026-10-30-policy-on-policies/). It is a
+convenience for people working through a pull request; where the two differ,
+the policy governs. Changing how policies are approved means amending that
+policy, not editing this section.
+
+Policies carry the broadest approval requirement of any document in this
+repository, because they bind all three participating institutions.
+
+**Who approves.** MOC, Boston University, and Red Hat each designate one
+approver for policy pull requests, listed in
+[Designated Policy Approvers and Responsible Teams](policies/2026-10-30-policy-on-policies/approvers/).
+Anyone may review and comment; only the designated approver records their
+institution's approval. The approver may not be the author, in which case that
+institution's alternate approves instead.
+
+**What is required to merge.**
+
+- All three institutions must approve. There is no majority, and no
+  institution's approval may be waived by the others.
+- The pull request stays open for at least ten business days after it has been
+  announced to all three institutions. A substantive change to the normative
+  text restarts that period; an editorial correction does not.
+- A request for changes blocks the merge until the same approver withdraws it.
+
+An editorial correction — a typographical fix, a formatting change, or a
+repair to a broken link — may merge with a single approval from any
+institution, provided the pull request is labelled `editorial`.
+
+**Once the last institution has approved**, and before the pull request
+merges, the proposer makes a final commit that records the approval:
+
+1. For a new policy, complete the `Initial version` row of its **Version
+   History** table. For an amendment, add a new row. Either way the row
+   records the date the last institution approved, the change type
+   (`Normative`, `Editorial`, or `Supporting`), and a short description of
+   what changed.
+2. Replace the `Pending` placeholder in that row's Pull request column with
+   this pull request's number.
+3. Confirm the policy still carries the eight required sections in order, and
+   that any section with no content reads `None.`
+
+> [!NOTE]
+> The `main` ruleset does not dismiss approvals on push, so this final commit
+> does not invalidate the approvals already recorded. The ruleset requires two
+> approving reviews; the requirement that one come from each institution is
+> enforced by the approvers, not by GitHub.
+
+A policy's last-approved date is the date of the most recent `Normative` row
+in its Version History. There is no separate frontmatter field to maintain, so
+there is no second copy of the date that can drift out of step.
 
 ## Production Change Requests
 
