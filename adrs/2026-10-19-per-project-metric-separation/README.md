@@ -123,7 +123,7 @@ The supporting choices, each of which could be made differently:
   pod and no quota used. Adding the template to the chart must not hand six existing projects a
   Grafana they never asked for.
 - **Dashboards are chart resources, not hand-built per project.** `project-overview` is one
-  `GrafanaDashboard` in `user-projects`, rendered into each project namespace. Because the
+  provisioning file in `user-projects`, rendered into each project namespace. Because the
   datasource behind it is scoped by the proxy, the same dashboard definition shows a different
   project its own data without being edited. Write a panel once, every project that opts in gets it,
   and nobody has to maintain six copies that drift.
@@ -132,8 +132,8 @@ The supporting choices, each of which could be made differently:
   another 20Gi, and Grafana queries that through the tenancy port.
 
   Grafana does keep state of its own, in a database: users, datasources, dashboards, preferences.
-  We run it without a volume anyway, which means everything we need comes back declaratively from
-  the CRs after a restart, and anything else is allowed to be lost. **That has a consequence for
+  We run it without a volume anyway, which means everything we need is read from the provisioning
+  files at startup, and anything else is allowed to be lost. **That has a consequence for
   projects: a dashboard built in the UI does not survive.** Dashboards belong in git. If a project
   needs to keep its own, it adds them to the chart. An opt-in for editing in the UI existed for a
   while and was dropped again in CCI-MOC/oac-apps#247.
@@ -141,10 +141,11 @@ The supporting choices, each of which could be made differently:
   platform: Prometheus evaluates `PrometheusRule`, Alertmanager routes what fires, both already
   running and both tenant-aware. Grafana alerting would be a second path next to the one OpenShift
   ships, so it is switched off in the config (`unified_alerting.enabled: "false"`).
-- **A community operator, knowingly.** `grafana-operator` v5 only ships in `community-operators`,
-  while every other operator here comes from `redhat-operators`. This is a deliberate exception. The
-  fallback, if community support turns out to be unacceptable for something projects rely on, is a
-  plain Deployment without the operator, at the cost of the dashboard CRs.
+- **No operator.** The chart deploys Grafana itself and sets it up from provisioning files at
+  startup. `grafana-operator` v5 ran it until CCI-MOC/oac-apps#230, but it only ships in
+  `community-operators`, it is not flagged FIPS-compliant, and it pushed each project's datasource
+  token into Grafana's admin API over plain HTTP. Grafana listens on `127.0.0.1` only, so the
+  oauth-proxy in the same pod is the only way in.
 
 ### What we did not pick
 
@@ -163,16 +164,13 @@ Two reasons against:
    correct assignment inside Grafana becomes security relevant. A misconfigured
    organisation or a shared datasource lets one project see another.
 
-2. Our tooling cannot do it. The `grafana-operator` has no CRD for
-   organisations, and `GrafanaDatasource.spec.datasource.orgId` carries
-   "Deprecated field, it has no effect". Dashboards and folders have no org
-   field at all, so everything lands in the default organisation. Organisations
-   per project, each with its own datasource and token, would have to be
-   created past GitOps through the Grafana API or a job of our own. That is a
-   step backwards from today, where every object is an operator CR.
+2. Provisioning files carry an `orgId`, but the organisations themselves are
+   not provisionable. They would have to be created through the Grafana API or
+   a job of our own, outside the files the chart writes, and the datasource of
+   every project would move into one pod.
 
 If project count makes the per-project cost hurt, this is still the option to
-come back to, with the operator gap as part of the price.
+come back to, with that gap as part of the price.
 
 #### Per-cluster separation instead of per-namespace
 
@@ -255,8 +253,8 @@ cluster, not the fleet. The fleet view is the hub's.
 **Dashboards are read only in the GUI.** They come from git, and an anonymous Editor could not be
 held to a change, so editing was dropped in CCI-MOC/oac-apps#247.
 
-**We depend on a community operator** for something projects use directly. Known, accepted, with a
-named fallback.
+**We maintain the Deployment ourselves** instead of letting an operator do it. In exchange nothing a
+project uses depends on a community build.
 
 **A project dashboard is only as good as the platform Prometheus under it**, and that is not part of
 this chart. `cadvisor` lives in the platform instance, not in user workload monitoring, so the
