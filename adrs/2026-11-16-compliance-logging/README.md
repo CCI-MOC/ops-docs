@@ -137,18 +137,18 @@ What becomes easier or more difficult to do because of this change?
 
 ### External Links
 
-[Continuous monitoring under FedRAMP 20x: Replacing annual assessments with persistent validation](https://aws.amazon.com/blogs/publicsector/continuous-monitoring-under-fedramp-20x-replacing-annual-assessments-with-persistent-validation/)
-[CloudWatch: Exporting log data to Amazon S3](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/S3Export.html)
-[CloudWatch: Real-time processing of log data with subscriptions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html)
-[Loki backend for pySigma](https://github.com/grafana/pySigma-backend-loki)
-[AWS Security Incident Response Guide (2019)](https://d1.awsstatic.com/WWPS/pdf/aws_security_incident_response.pdf)
-[AWS Security Incident Response Guide (2020)](https://d1.awsstatic.com/whitepapers/aws_security_incident_response.pdf)
+- [Continuous monitoring under FedRAMP 20x: Replacing annual assessments with persistent validation](https://aws.amazon.com/blogs/publicsector/continuous-monitoring-under-fedramp-20x-replacing-annual-assessments-with-persistent-validation/)
+- [CloudWatch: Exporting log data to Amazon S3](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/S3Export.html)
+- [CloudWatch: Real-time processing of log data with subscriptions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html)
+- [Loki backend for pySigma](https://github.com/grafana/pySigma-backend-loki)
+- [AWS Security Incident Response Guide (2019)](https://d1.awsstatic.com/WWPS/pdf/aws_security_incident_response.pdf)
+- [AWS Security Incident Response Guide (2020)](https://d1.awsstatic.com/whitepapers/aws_security_incident_response.pdf)
 
 ### Issues
 
-[Implement centralized logging](https://github.com/CCI-MOC/MOC-issues/issues/605)
-[Evaluate centralized observability cluster for alerts across all clusters](https://github.com/CCI-MOC/MOC-issues/issues/703)
-[Collect system logs from all clusters and standalone systems](https://github.com/CCI-MOC/MOC-issues/issues/694)
-[Implement alerting](https://github.com/CCI-MOC/MOC-issues/issues/698)
-[Observability dashboard architecture vision (centralized today → per-cluster / per-project options)](https://github.com/CCI-MOC/MOC-issues/issues/383)
-[Metrics persistence on compliant clusters](https://github.com/CCI-MOC/MOC-issues/issues/784)
+- [Implement centralized logging](https://github.com/CCI-MOC/MOC-issues/issues/605)
+- [Evaluate centralized observability cluster for alerts across all clusters](https://github.com/CCI-MOC/MOC-issues/issues/703)
+- [Collect system logs from all clusters and standalone systems](https://github.com/CCI-MOC/MOC-issues/issues/694)
+- [Implement alerting](https://github.com/CCI-MOC/MOC-issues/issues/698)
+- [Observability dashboard architecture vision (centralized today → per-cluster / per-project options)](https://github.com/CCI-MOC/MOC-issues/issues/383)
+- [Metrics persistence on compliant clusters](https://github.com/CCI-MOC/MOC-issues/issues/784)
