@@ -124,3 +124,31 @@ The actual format of Sigma rules, whether upstream, Security Analytics, or Wazuh
 Sigma rules abstract over logging and detection implementation, and the [pySigma Loki backend](https://github.com/grafana/pySigma-backend-loki/) provides upstream support for compiling Sigma rules to Loki LogQL.
 
 For AWS-specific solutions, [AWS GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html) is the solution of most interest. GuardDuty [takes logs](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_data-sources.html) from CloudTrail, VPC Flow Logs, and Route53 resolver query logs and delivers [findings](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_finding-types-active.html) that can be [exported to S3](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_exportfindings.html) and [alerted on with EventBridge](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_eventbridge.html).
+
+## Decision
+
+What is the change that we're proposing and/or doing?
+
+## Consequences
+
+What becomes easier or more difficult to do because of this change?
+
+## See also
+
+### External Links
+
+[Continuous monitoring under FedRAMP 20x: Replacing annual assessments with persistent validation](https://aws.amazon.com/blogs/publicsector/continuous-monitoring-under-fedramp-20x-replacing-annual-assessments-with-persistent-validation/)
+[CloudWatch: Exporting log data to Amazon S3](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/S3Export.html)
+[CloudWatch: Real-time processing of log data with subscriptions](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html)
+[Loki backend for pySigma](https://github.com/grafana/pySigma-backend-loki)
+[AWS Security Incident Response Guide (2019)](https://d1.awsstatic.com/WWPS/pdf/aws_security_incident_response.pdf)
+[AWS Security Incident Response Guide (2020)](https://d1.awsstatic.com/whitepapers/aws_security_incident_response.pdf)
+
+### Issues
+
+[Implement centralized logging](https://github.com/CCI-MOC/MOC-issues/issues/605)
+[Evaluate centralized observability cluster for alerts across all clusters](https://github.com/CCI-MOC/MOC-issues/issues/703)
+[Collect system logs from all clusters and standalone systems](https://github.com/CCI-MOC/MOC-issues/issues/694)
+[Implement alerting](https://github.com/CCI-MOC/MOC-issues/issues/698)
+[Observability dashboard architecture vision (centralized today → per-cluster / per-project options)](https://github.com/CCI-MOC/MOC-issues/issues/383)
+[Metrics persistence on compliant clusters](https://github.com/CCI-MOC/MOC-issues/issues/784)
