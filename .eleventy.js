@@ -4,11 +4,28 @@ import markdownItGithubAlerts from "markdown-it-github-alerts";
 
 export default function (eleventyConfig) {
 	eleventyConfig.addPassthroughCopy("_assets");
+	eleventyConfig.addPassthroughCopy({
+		"node_modules/mermaid/dist/mermaid.min.js": "_assets/mermaid.min.js",
+	});
 
 	const markdownLibrary = markdownIt({ html: true, typographer: true })
 		.use(markdownItGithubAlerts)
 		.use(markdownItAnchor, { level: [2, 3, 4] });
 	eleventyConfig.setLibrary("md", markdownLibrary);
+
+	// Mermaid fenced code blocks render as <pre class="mermaid"> instead of
+	// highlighted code, which is the markup mermaid.js looks for in the
+	// browser to replace with an inline SVG diagram.
+	const defaultFenceRenderer = markdownLibrary.renderer.rules.fence.bind(
+		markdownLibrary.renderer.rules,
+	);
+	markdownLibrary.renderer.rules.fence = (tokens, idx, options, env, self) => {
+		const token = tokens[idx];
+		if (token.info.trim() === "mermaid") {
+			return `<pre class="mermaid">${markdownLibrary.utils.escapeHtml(token.content)}</pre>\n`;
+		}
+		return defaultFenceRenderer(tokens, idx, options, env, self);
+	};
 
 	// Builds a collapsed, non-printing table of contents from the h2-h4
 	// headings (and their anchor ids, added by markdown-it-anchor above)

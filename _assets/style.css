@@ -209,6 +209,12 @@ pre {
 	margin-bottom: 0;
 }
 
+pre.mermaid[data-processed] {
+	background-color: transparent;
+	padding: 0;
+	text-align: center;
+}
+
 @media print {
 	nav,
 	.noprint {
