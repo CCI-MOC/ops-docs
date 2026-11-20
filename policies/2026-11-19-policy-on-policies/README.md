@@ -90,7 +90,7 @@ Policies are amended in place. A revision edits the existing `README.md` in the 
 
 Every amendment appends a row to the Version History section recording the date on which the last institution approved the normative text, the type of change (`Normative`, `Editorial`, or `Supporting`), what changed, and the pull request that made the change. The policy as it stands in `main` is always the policy in force; the history of how it got there lives in Version History and in the repository's commit history.
 
-An amendment to normative content carries the same approval requirements as a new policy, including the ten business day comment period and the requirement that all three institutions approve, regardless of how small the change is.
+An amendment to normative content carries the same approval requirements as a new policy, including the same comment period and the requirement that all three institutions approve, regardless of how small the change is.
 
 An editorial correction — a typographical fix, a formatting change, or a repair to a broken link, none of which change the meaning of the policy — may be merged with a single approval from any institution, provided the pull request is labelled as editorial. Any approver may object that a change labelled editorial is substantive, which returns it to the full approval process.
 

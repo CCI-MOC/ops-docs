@@ -94,9 +94,8 @@ institution's alternate approves instead.
 
 - All three institutions must approve. There is no majority, and no
   institution's approval may be waived by the others.
-- The pull request stays open for at least ten business days after it has been
-  announced to all three institutions. A substantive change to the normative
-  text restarts that period; an editorial correction does not.
+- The pull request stays open for a comment period after it has been announced to all three institutions.
+  This allows time for feedback before it is approved.   A substantive change to the normative text restarts that period; an editorial correction does not.
 - A request for changes blocks the merge until the same approver withdraws it.
 
 An editorial correction — a typographical fix, a formatting change, or a
