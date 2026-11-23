@@ -129,59 +129,57 @@ For AWS-specific solutions, [AWS GuardDuty](https://docs.aws.amazon.com/guarddut
 
 Based on this context, here is a concrete list of decisions for this ADR.
 
-### 1. Use S3 Object Lock for the compliance archive
+### 1. Store active logs only in Loki and S3
 
-S3 is a standard interface used across Loki and AWS, and non-AWS implementations of S3 are available. S3 Object Lock's WORM functionality is the reason to choose this over other S3 providers. Should cost become an issue, exploring Pure FlashBlade Object Storage with an equivalent WORM mode is the alternative.
-
-### 2. Use AWS GuardDuty for incident detection on AWS
-
-By combining CloudTrail, VPC Flow Logs, and Route53, GuardDuty provides a good first step in incident detection for AWS.
-
-### 3. Feed AWS GuardDuty findings into the observability cluster
-
-See discussion for #4 below.
-
-### 4. All alerts through AlertManager, Slack, and PagerDuty in the observability cluster
-
-Choose unified alerting over delegating to AWS. Should integration, performance, or resource usage be an issue, EventBridge to SNS is a valid pattern to use on AWS instead.
-
-Slack channels are the existing alerting mechanism for low-priority alerts, and PagerDuty needs to page someone for high-priority alerts that require action before the start of the next business day.
-
-### 5. Open a security investigation ticket automatically based on a predefined subset of alerts
-
-The ticketing platform is not decided, but in principle, alerts close on remediation, but ticketing is necessary for investigation after remediation.
-
-### 6. Store logs only in Loki and S3
-
-For the active set of logs to alert on, prefer Loki, and use standalone S3 buckets only when necessary. Use S3 Object Lock for long-term, durable storage.
+For the active set of logs to alert on, prefer Loki, and use standalone S3 buckets only when necessary.
 
 This precludes using ElasticSearch/OpenSearch to store logs, given the discussed operational costs of storing logs in two systems.
 
-### 7. For CloudWatch, use subscription filters and Lambda Promtail to feed logs to Loki
+### 2. Use S3 Object Lock for the compliance archive
+
+S3 is a standard interface used across Loki and AWS, and non-AWS implementations of S3 are available. S3 Object Lock's WORM functionality is the reason to choose this over other S3 providers. Should cost become an issue, exploring Pure FlashBlade Object Storage with an equivalent WORM mode is the alternative.
+
+### 3. Use AWS GuardDuty for incident detection on AWS
+
+By combining CloudTrail, VPC Flow Logs, and Route53, GuardDuty provides a good first step in incident detection for AWS.
+
+### 4. Feed AWS GuardDuty findings into the observability cluster
+
+See discussion for #16 below.
+
+### 5. For CloudWatch, use subscription filters and Lambda Promtail to feed logs to Loki
 
 This appears to be the most established pattern for implementing CloudWatch to Loki
 
-### 8. For CloudTrail, run Lambda Promtail on CloudTrail's S3 logs to feed logs to Loki
+### 6. For CloudTrail, run Lambda Promtail on CloudTrail's S3 logs to feed logs to Loki
 
 This appears to be the most established pattern for implementing CloudTrail to Loki
 
-### 9. Feed AWS Inspector, Security Hub, and AWS Config logs to Loki
+### 7. Feed AWS Inspector, Security Hub, and AWS Config logs to Loki
 
 These three components support output to S3 and can use the same S3 to Lamda Promtail pattern from CloudTrail.
 
-### 10. For other AWS log sources, use Lambda Promtail to feed logs to Loki
+### 8. For other AWS log sources, use Lambda Promtail to feed logs to Loki
 
 An investigation into feasibility is necessary, but GuardDuty, CloudWatch, and CloudTrail should cover most of incident detection for AWS.
 
 For vulnerability and compliance scanning, Inspector, Security Hub, and Config provide coverage.
 
-### 11. For switches, BMC, and Pure, use syslog and Grafana Alloy to feed logs to Loki
+### 9. For switches, BMC, and Pure, use syslog and Grafana Alloy to feed logs to Loki
 
 Additional investigation is needed here, but syslog should be the lingua franca of log formats for these components.
 
-### 12. For Github Enterprise logs, feed into S3 and Loki
+### 10. For Github Enterprise logs, feed into S3 and Loki
 
 This appears to be the only supported approach for cloud Github.
+
+### 11. Enable RHACS threat detection and response for incident detection in OpenShift
+
+Go through RHACS first before exploring third-party solutions, e.g. CrowdStrike, for incident detection.
+
+### 12. Ensure ClusterLogForwarder captures RHACS, Compliance Operator, and ArgoCD logs
+
+The first two are for compliance logging, and ArgoCD logs are for general logging coverage.
 
 ### 13. For OpenShift, continue with the current ClusterLogForwarder and observability cluster architecture from MOC 1.0
 
@@ -189,27 +187,29 @@ This ADR is built around preserving as much of the existing MOC 1.0 Loki impleme
 
 This preserves existing logging coverage for operational and billing needs.
 
-For dashboarding, extend the existing Grafana dashboards to cover compliance needs.
+For dashboards, extend the existing Grafana implementation to cover compliance needs.
 
-ClusterLogForwarder will output both to Loki and S3 Object Lock from #1/#6.
+ClusterLogForwarder will output both to Loki and S3 Object Lock from #1/#2.
 
-### 14. Host the observability cluster on EKS
+### 14. Expose Keycloak and Github IDP information to Loki for correlation
+
+As many log sources as possible need to include a unique user identifier that Loki can tie back to Keycloak and Github identities.
+
+### 15. Host the observability cluster on EKS
 
 This follows the pattern of hosting shared services on EKS, e.g. Keycloak.
 
 If cost becomes an issue, this should move on-premise.
 
-### 15. Ensure ClusterLogForwarder captures RHACS, Compliance Operator, and ArgoCD logs
+### 16. All alerts through AlertManager, Slack, and PagerDuty in the observability cluster
 
-The first two represent vulnerability and compliance scanning findings, and ArgoCD logs are for general logging coverage.
+Choose unified alerting over delegating to AWS. Should integration, performance, or resource usage be an issue, EventBridge to SNS is a valid pattern to use on AWS instead.
 
-### 16. Enable RHACS threat detection and response for incident detection in OpenShift
+Slack channels are the existing alerting mechanism for low-priority alerts, and PagerDuty needs to page someone for high-priority alerts that require action before the start of the next business day.
 
-Go through RHACS first before exploring third-party solutions, e.g. CrowdStrike, for incident detection.
+### 17. Open a security investigation ticket automatically based on a predefined subset of alerts
 
-### 17. Expose Keycloak and Github IDP information to Loki for correlation
-
-As many log sources as possible need to include a unique user identifier that Loki can tie back to Keycloak and Github identities.
+The ticketing platform is not decided, but in principle, alerts close on remediation, but ticketing is necessary for investigation after remediation.
 
 ### 18. Use the pySigma Loki backend for incident detection
 
@@ -221,7 +221,7 @@ The core decision here is to standardize on Sigma rules as compatible with pySig
 
 ### 20. Defer purchasing a dedicated SIEM solution
 
-pySigma and Loki provide the core ingest and correlation, the ticketing system in #5 covers investigations, and AlertManager and Grafana from #13 provide notification of security issues.
+pySigma and Loki provide the core ingest and correlation, the ticketing system in #17 covers investigations, and AlertManager and Grafana from #13 provide notification of security issues.
 
 ## Consequences
 
