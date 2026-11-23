@@ -93,6 +93,7 @@ On-premise is:
   - Compliance Operator
   - Cluster Logging Operator
   - Other operators
+- Palo Alto firewall appliances
 - EverPure FlashBlade storage appliances
 - Various network switches with hardware console
 - Various compute hardware consoles
@@ -165,7 +166,7 @@ An investigation into feasibility is necessary, but GuardDuty, CloudWatch, and C
 
 For vulnerability and compliance scanning, Inspector, Security Hub, and Config provide coverage.
 
-### 9. For switches, BMC, and Pure, use syslog and Grafana Alloy to feed logs to Loki
+### 9. For switches, BMC, Pure, and the Palo Alto firewalls, use syslog and Grafana Alloy to feed logs to Loki
 
 Additional investigation is needed here, but syslog should be the lingua franca of log formats for these components.
 
