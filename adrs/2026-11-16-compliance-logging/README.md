@@ -203,19 +203,23 @@ If cost becomes an issue, this should move on-premise.
 
 The first two represent vulnerability and compliance scanning findings, and ArgoCD logs are for general logging coverage.
 
-### 16. Expose Keycloak and Github IDP information to Loki for correlation
+### 16. Enable RHACS threat detection and response for incident detection in OpenShift
+
+Go through RHACS first before exploring third-party solutions, e.g. CrowdStrike, for incident detection.
+
+### 17. Expose Keycloak and Github IDP information to Loki for correlation
 
 As many log sources as possible need to include a unique user identifier that Loki can tie back to Keycloak and Github identities.
 
-### 17. Use the pySigma Loki backend for incident detection
+### 18. Use the pySigma Loki backend for incident detection
 
 Add compiled Sigma rules to Loki via LogQL.
 
-### 18. Select Sigma upstream, SOC Prime, and OpenSearch Security Analytics rules where practical, and write custom Sigma rules as needed
+### 19. Select Sigma upstream, SOC Prime, and OpenSearch Security Analytics rules where practical, and write custom Sigma rules as needed
 
-The core decision here is to standardize on Sigma rules as compatible with pySigma Loki in #17.
+The core decision here is to standardize on Sigma rules as compatible with pySigma Loki in #18.
 
-### 19. Defer purchasing a dedicated SIEM solution
+### 20. Defer purchasing a dedicated SIEM solution
 
 pySigma and Loki provide the core ingest and correlation, the ticketing system in #5 covers investigations, and AlertManager and Grafana from #13 provide notification of security issues.
 
