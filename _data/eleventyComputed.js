@@ -33,6 +33,16 @@ export default {
 		return baseName;
 	},
 
+	// A file next to a README (an ADR's measurements.md, say) belongs to that
+	// document; the index pages list it under it instead of as a row of its
+	// own. The value is the parent's pageId.
+	parentId: (data) => {
+		const match = data.page.filePathStem.match(
+			/^\/(adrs|docs|policies|production-changes)\/([^/]+)\/(?!README$)[^/]+$/,
+		);
+		return match ? `${match[1]}/${match[2]}` : undefined;
+	},
+
 	// Only show the pageId on actual documents (ADRs, docs, policies,
 	// production changes), not on collection index pages, the top-level
 	// README, or templates.
