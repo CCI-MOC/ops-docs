@@ -9,13 +9,27 @@ title: Architectural Decision Records
   </tr>
 
   {% for adr in collections.adr %}
+  {% unless adr.data.parentId %}
   <tr>
     <td>
       <a href="{{ adr.url }}">{{ adr.data.pageId }}</a>
+      {% assign companions = 0 %}
+      {% for c in collections.adr %}{% if c.data.parentId == adr.data.pageId %}{% assign companions = companions | plus: 1 %}{% endif %}{% endfor %}
+      {% if companions > 0 %}
+      <details>
+        <summary>{{ companions }} more {% if companions == 1 %}file{% else %}files{% endif %}</summary>
+        <ul>
+          {% for c in collections.adr %}{% if c.data.parentId == adr.data.pageId %}
+          <li><a href="{{ c.url }}">{{ c.data.title | default: c.data.pageId }}</a></li>
+          {% endif %}{% endfor %}
+        </ul>
+      </details>
+      {% endif %}
     </td>
     <td>
       {{ adr.data.title }}
     </td>
   </tr>
+  {% endunless %}
   {% endfor %}
 </table>
